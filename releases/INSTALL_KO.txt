@@ -1,0 +1,76 @@
+GrAnit lilToon — 대충 설치하고 쓰는 법
+
+섭페에서 릴툰 느낌 보면서 칠하라고 만든 플러그인임.
+Windows 64비트 / 섭페 12용. 확인한 버전은 12.0.3.
+릴툰 2.3.4, Unity Built-in + Linear 기준으로 만들었음.
+받는 곳: https://github.com/GEEAEECODE/Proj_Granit/releases
+
+[일단 설치]
+
+설치 존나 귀찮으면 MSI 써. 실행하고 설치 누르면 경로 알아서 잡음.
+직접 넣고 싶으면 ZIP 쓰고. 둘 중 하나만 하면 됨.
+설치하거나 업데이트하기 전엔 작업 저장하고 섭페 꺼.
+
+ZIP은 압축 풀어서 granit_liltoon 폴더를 여기 넣어.
+
+<문서>\Adobe\Adobe Substance 3D Painter\python\plugins\granit_liltoon
+
+중간 폴더 없으면 만들면 됨. 문서가 OneDrive나 다른 드라이브에 있으면
+탐색기에 뜨는 실제 문서 폴더로 가. 업데이트는 기존 폴더에 덮어쓰기.
+granit_liltoon 안에 granit_liltoon 또 넣지만 마.
+
+섭페 켜고 Python → granit_liltoon 체크하면 끝.
+목록에 안 뜨면 Python → Reload Plugins Folder 한 번 눌러봐.
+창 닫아버렸으면 Window → GrAnit-lilToon에서 다시 열면 됨.
+셰이더는 플러그인에 들어 있으니 따로 찾아서 넣을 필요 없음.
+
+참고로 Reload Plugins Folder는 목록만 새로 읽음.
+켜진 플러그인 코드를 다시 읽히려면 Python 메뉴에서 체크 껐다 켜.
+
+[그래서 어케 씀]
+
+1. 프로젝트 열고 작업할 텍스처셋 골라.
+2. 플러그인 창에서 lilToon ON 체크. 셰이더는 알아서 가져와서 적용함.
+3. Base Color / Normal / Roughness / Metallic은 평소처럼 섭페 채널에 칠해.
+   셰이더 값은 GrAnit-lilToon 창에서 만지면 됨.
+4. 필요한 기능 켜고 조절해. 체크 꺼져 있으면 안 나오는 게 맞음.
+   - 그림자: Use Shadow 켜고 각 Shadow의 Color / Border / Blur / Alpha 만져.
+     Shadow 3은 Alpha가 0이면 안 보임. 쓸 거면 올려.
+   - Rim Shade: Use Rim Shade. 테두리 쪽 어둡게 하는 거.
+   - 반사: Use Reflection. HDRI 반사도 쓸 거면 Apply Environment Reflection까지 켜.
+   - MatCap: Use MatCap 켜고 Image에 이미지 넣어.
+   - 그림자 컬러랑 마스크는 해당 체크 켜면 쓸 채널이 생김.
+5. 다 했으면 SPP 저장해. 플러그인 값도 같이 저장됨.
+
+텍스처셋마다 ON/OFF랑 값은 따로임.
+OFF하면 켜기 전에 쓰던 셰이더로 돌아감. 그라니트 값이랑 칠한 건 남아 있음.
+값 만지다 망했다 싶으면 옆에 초기화 버튼 눌러. 그 값만 기본값으로 돌아감.
+
+[유니티랑 주고받기]
+
+- 가져올 때: .mat 선택 가져오기 → 파일 고르고 → 필요한 것만 체크
+  → 선택 항목 가져오기. 체크박스 누른 채 쭉 드래그해도 됨.
+  텍스처는 기본으로 Fill Layer에 들어가고, 성공하면 해당 텍스처셋에 자동 적용됨.
+  텍스처랑 Variant 부모까지 찾으려면 원본 Unity 프로젝트랑 .meta도 있어야 함.
+  .mat 하나만 달랑 떼어오면 연결된 파일은 못 찾을 수 있음.
+
+- 설정만 뺄 거면: .mat 세팅 저장.
+- 텍스처까지 뺄 거면: 머테리얼 + 텍스처 내보내기.
+  릴툰 깔린 Unity 프로젝트의 Assets 밑에 저장하면 됨.
+  같은 .mat 골라서 또 내보내면 덮어씀. 텍스처 묶음이면 텍스처도 바뀜.
+  기존 .meta GUID는 유지하고 마지막 성공 경로도 기억함.
+  이 둘은 JSON 안 끼워 넣음.
+
+- 플러그인 값만 옮길 거면: 내보내기 / 불러오기(JSON), 값 복사 / 붙여넣기.
+  이건 값 프리셋이라 텍스처 픽셀까지 싸 들고 가주진 않음.
+
+지금 머테리얼 교환은 지원되는 릴툰 불투명 셰이더 기준임.
+섭페랑 유니티는 조명이랑 색 관리가 다르니까 마지막 외형은 유니티에서도 봐.
+업데이트는 섭페 켜고 플러그인 시작할 때 한 번 확인함. 새 버전 있으면 위에 뜸.
+
+[License]
+
+Original GrAnit code and documentation: CC0-1.0. See LICENSE.
+lilToon-derived code: MIT. See shaders/LICENSE.lilToon.txt inside the plugin.
+See NOTICE.txt for scope and third-party notices.
+The official English legal texts are provided without modification.

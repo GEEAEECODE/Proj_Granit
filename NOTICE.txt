@@ -1,0 +1,30 @@
+GrAnit lilToon - Licensing Notice
+
+Original GrAnit code and documentation
+SPDX license identifier: CC0-1.0
+
+To the extent possible under law, GEEAEECODE has waived all copyright and
+related or neighboring rights to the original GrAnit code and documentation
+that GEEAEECODE owns, under CC0 1.0 Universal.
+See LICENSE for the unmodified English legal text.
+https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+lilToon-derived code
+SPDX license identifier: MIT
+
+Granit_lilToon_Painter.glsl contains code derived from lilToon.
+Copyright (c) 2020-present lilxyzw
+The derived portions remain subject to the MIT License. The complete
+upstream copyright and permission notice is preserved in LICENSE.lilToon.txt
+alongside the shader, including in the plugin's shaders folder.
+https://github.com/lilxyzw/lilToon
+https://opensource.org/license/mit
+
+Other third-party material
+
+Installer artwork, separately supplied third-party assets, Substance 3D
+Painter, Unity and external runtime libraries are not covered by the CC0
+dedication above. Their respective rights and terms remain applicable.
+
+This notice identifies applicable licenses and their scope. It does not
+replace, modify or add conditions to the official CC0 or MIT legal texts.
