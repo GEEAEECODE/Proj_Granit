@@ -1,5 +1,27 @@
 # GrAnit lilToon
 
+# ⬇️ [다운로드는 여기 — Releases](https://github.com/GEEAEECODE/Proj_Granit/releases/latest)
+
+> [!IMPORTANT]
+> **처음이면 MSI 설치 파일 받아. 실행하고 설치 누르면 됨.**
+>
+> **Windows 64비트 / Substance 3D Painter 12용.**
+
+| 추천 · 자동 설치 | 직접 폴더에 넣을 거면 |
+| :---: | :---: |
+| **[⬇️ MSI 설치 파일 받기 · 1.0.0](https://github.com/GEEAEECODE/Proj_Granit/releases/download/1.0.0/GrAnit-lilToon-1.0.0-x64.msi)** | **[⬇️ ZIP 받기 · 1.0.0](https://github.com/GEEAEECODE/Proj_Granit/releases/download/1.0.0/GrAnit-lilToon-1.0.0.zip)** |
+| 실행 → 설치 | 압축 풀기 → 플러그인 폴더에 복사 |
+
+**작업 저장하고 섭페 끄기 → MSI 설치 → 섭페 켜기 → Python 메뉴에서 `granit_liltoon` 체크.**
+
+ZIP 설치 경로랑 자세한 사용법은 **[설치·사용 안내](releases/INSTALL_KO.txt)**에 있음. 새 버전은 위의 **Releases**에서 확인해.
+
+## 🎬 [처음이면 이거부터 — 튜토리얼 영상](https://www.youtube.com/watch?v=W_PbVABDJkw)
+
+글보다 영상이 편하면 이거 봐. **[GrAnit lilToon 튜토리얼 보기 → YouTube](https://www.youtube.com/watch?v=W_PbVABDJkw)**
+
+---
+
 **Unity lilToon ↔ Substance 3D Painter 대응 셰이더 + 플러그인.**
 
 섭페에서 릴툰 느낌 보면서 칠하고, 유니티랑 머테리얼 설정·텍스처를 주고받으려고 만든 도구임. Unity에서는 기존 lilToon을 쓰고, Painter에서는 GrAnit의 GLSL 셰이더와 Python 플러그인으로 작업하면 됨.
@@ -7,8 +29,6 @@
 ![Unity lilToon과 Substance Painter GrAnit 비교 — 왼쪽 Unity, 오른쪽 Painter](docs/images/unity-painter-comparison.png)
 
 **왼쪽: Unity / 오른쪽: Substance Painter.** 조명·색 관리·렌더링 환경 차이는 있으니 최종 외형은 Unity에서도 확인해.
-
-[다운로드 — Releases](https://github.com/GEEAEECODE/Proj_Granit/releases) · [설치·사용 안내](releases/INSTALL_KO.txt)
 
 ## 뭐 하는 물건이냐
 
