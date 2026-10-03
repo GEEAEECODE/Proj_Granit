@@ -18,7 +18,9 @@ ZIP 설치 경로랑 자세한 사용법은 **[설치·사용 안내](releases/I
 
 ## 🎬 [처음이면 이거부터 — 튜토리얼 영상](https://www.youtube.com/watch?v=W_PbVABDJkw)
 
-글보다 영상이 편하면 이거 봐. **[GrAnit lilToon 튜토리얼 보기 → YouTube](https://www.youtube.com/watch?v=W_PbVABDJkw)**
+[![GrAnit lilToon 튜토리얼 — 클릭하면 YouTube에서 재생](https://i.ytimg.com/vi/W_PbVABDJkw/hqdefault.jpg)](https://www.youtube.com/watch?v=W_PbVABDJkw)
+
+**이미지를 누르면 YouTube에서 재생됨. [▶ 튜토리얼 바로 보기](https://www.youtube.com/watch?v=W_PbVABDJkw)**
 
 ---
 
