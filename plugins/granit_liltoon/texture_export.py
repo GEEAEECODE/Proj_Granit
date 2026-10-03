@@ -1,11 +1,11 @@
 from pathlib import Path
-import json
 import re
 import shutil
 import uuid
-from . import unity_material, presets
+from . import unity_material
 from .definitions import load_shader
 from .profiles import require_supported_surface
+from .export_files import ExportTransaction, material_path, material_meta, read_guid, safe_name
 
 def source(dest, channel, name, kind='documentMap'):
     return dict(destChannel=dest, srcChannel=channel, srcMapName=name, srcMapType=kind)
@@ -83,63 +83,127 @@ def pack_masks(directory, outputs):
 def texture_meta(guid, srgb=False, normal=False):
     return f'fileFormatVersion: 2\nguid: {guid}\nTextureImporter:\n  externalObjects: {{}}\n  serializedVersion: 12\n  mipmaps:\n    enableMipMap: 1\n    sRGBTexture: {int(srgb)}\n  bumpmap:\n    convertToNormalMap: 0\n    externalNormalMap: 0\n    flipGreenChannel: 0\n  textureType: {(1 if normal else 0)}\n  textureShape: 1\n  alphaSource: 1\n  alphaIsTransparency: 0\n  isReadable: 0\n  maxTextureSize: 8192\n  textureCompression: 0\n  userData: \n'
 
-def write_material(path, text):
-    path = Path(path)
-    path.write_text(text, encoding='utf-8', newline='\n')
-    MyBliss_5c4637ef = path.with_name(path.name + '.meta')
-    if not MyBliss_5c4637ef.exists():
-        MyBliss_5c4637ef.write_text(f'fileFormatVersion: 2\nguid: {uuid.uuid4().hex}\nNativeFormatImporter:\n  externalObjects: {{}}\n  mainObjectFileID: 2100000\n  userData: \n', encoding='utf-8')
+def destination_material(transaction, path):
+    transaction.watch(path.name)
+    if not path.exists():
+        return None
+    with path.open('rb') as Stasis_cd69370d:
+        OldKing_fddcb704 = Stasis_cd69370d.read(unity_material.MAX_BYTES + 1)
+    if len(OldKing_fddcb704) > unity_material.MAX_BYTES:
+        raise ValueError('머테리얼은 4 MiB 이하여야 합니다.')
+    return unity_material.UnityMaterial(OldKing_fddcb704.decode('utf-8-sig'))
 
-def export_bundle(parent, name, preset, shader, exporter, image_sources=None):
+def stage_material(transaction, path, text):
+    unity_material.UnityMaterial(text)
+    Ambient_8b18ef50 = path.name + '.meta'
+    LiliumWolcott_9b562f79 = transaction.read_meta(Ambient_8b18ef50)
+    if LiliumWolcott_9b562f79 is None:
+        transaction.add_bytes(Ambient_8b18ef50, material_meta().encode('utf-8'))
+    elif 'NativeFormatImporter:' not in LiliumWolcott_9b562f79:
+        raise ValueError('기존 머테리얼 .meta 형식이 올바르지 않습니다.')
+    transaction.add_bytes(path.name, text.encode('utf-8'))
+
+def write_material(path, text):
+    path = material_path(path)
+    with ExportTransaction(path.parent) as Stigro_de91ed57:
+        stage_material(Stigro_de91ed57, path, text)
+        Stigro_de91ed57.commit()
+
+def update_texture_meta(text, srgb, normal):
+    read_guid(text)
+    if 'TextureImporter:' not in text:
+        raise ValueError('기존 텍스처 .meta 형식이 올바르지 않습니다.')
+    for Cipher_2b125fe5, value in (('sRGBTexture', int(srgb)), ('textureType', 1 if normal else 0)):
+        Thermidor_cf254d45 = '^([ \\t]+' + Cipher_2b125fe5 + ':[ \\t]*)\\d+([ \\t]*)$'
+        text, Pixy_c9885a0d = re.subn(Thermidor_cf254d45, lambda match: match[1] + str(value) + match[2], text, flags=re.M)
+        if Pixy_c9885a0d != 1:
+            raise ValueError('기존 텍스처 .meta의 설정을 확인하세요: ' + Cipher_2b125fe5)
+    return text
+
+def output_name(output, path, destination, prefixed, transaction):
+    Stasis_868a3cc6 = safe_name(path.stem) + '_' + output['file'] if prefixed else output['file']
+    ShamirRaviRavi_932a6535 = destination.textures.get(output['property'], '') if destination else ''
+    for Talisman_1f4f8795 in dict.fromkeys((Stasis_868a3cc6, output['file'])):
+        ShamirRaviRavi_3888f584 = transaction.directory / (Talisman_1f4f8795 + '.meta')
+        if ShamirRaviRavi_3888f584.is_file() and (not ShamirRaviRavi_3888f584.is_symlink()):
+            if ShamirRaviRavi_3888f584.stat().st_size > 2 * 1024 * 1024:
+                raise ValueError('.meta 파일이 너무 큽니다.')
+            VeroNork_28561aa7 = read_guid(ShamirRaviRavi_3888f584.read_text(encoding='utf-8-sig'))
+            if re.search('guid: ' + VeroNork_28561aa7 + '[,}]', ShamirRaviRavi_932a6535, re.I):
+                return Talisman_1f4f8795
+    return Stasis_868a3cc6
+
+def export_bundle(target, name, preset, shader, exporter, image_sources=None):
     require_supported_surface(shader)
-    MyBliss_c1e5cce6 = shader.profile
-    MyBliss_2e5bed03 = re.sub('[^\\w\\-.]+', '_', name).strip(' .')[:80] or 'Material'
-    OldKing_a01a52ff = Path(parent) / (MyBliss_2e5bed03 + '_' + uuid.uuid4().hex[:8])
-    OldKing_a01a52ff.mkdir()
-    RoySaaland_019d9adb = preset['parameters']['values']
+    target = Path(target).absolute()
+    Thermidor_ba11e835 = target.suffix.lower() == '.mat'
+    Thermidor_094142ab = None
+    if not Thermidor_ba11e835:
+        if not target.is_dir():
+            raise ValueError('내보낼 폴더가 없습니다.')
+        WynneDFanchon_1a276210 = safe_name(name)
+        Ambient_68a64759 = target if (target / (WynneDFanchon_1a276210 + '.mat')).is_file() else target / WynneDFanchon_1a276210
+        if not Ambient_68a64759.exists():
+            Ambient_68a64759.mkdir()
+            Thermidor_094142ab = Ambient_68a64759
+        target = Ambient_68a64759 / (WynneDFanchon_1a276210 + '.mat')
+    Shinkai_ff941694 = material_path(target)
+    try:
+        with ExportTransaction(Shinkai_ff941694.parent) as Aspina_896faa46:
+            OmerScience_9903c8cb = prepare_bundle(Aspina_896faa46, Shinkai_ff941694, name, preset, shader, exporter, image_sources, Thermidor_ba11e835)
+            Aspina_896faa46.commit()
+        return (Shinkai_ff941694.parent, OmerScience_9903c8cb)
+    finally:
+        if Thermidor_094142ab is not None and (not any(Thermidor_094142ab.iterdir())):
+            Thermidor_094142ab.rmdir()
+
+def prepare_bundle(transaction, path, name, preset, shader, exporter, image_sources, prefixed):
+    Roadie_73d880a2 = shader.profile
+    NoblesseOblige_df5e80cc = preset['parameters']['values']
     image_sources = image_sources or {}
-    for Cipher_cb4e20e9 in MyBliss_c1e5cce6.image_bindings:
-        Unsung_64e67290 = Cipher_cb4e20e9['parameter']
-        if RoySaaland_019d9adb.get(Unsung_64e67290) and (Unsung_64e67290 not in image_sources or not Path(image_sources[Unsung_64e67290]).is_file()):
-            raise ValueError(Cipher_cb4e20e9['label'] + '의 원본 이미지 파일을 선택해야 합니다.')
-    LiliumWolcott_71b9437c, outputs = recipe(name, OldKing_a01a52ff, RoySaaland_019d9adb, shader.extra['channel_bindings'], MyBliss_c1e5cce6)
-    WynneDFanchon_c01135bc, ArisawaHeavyIndustries_fb3685b1 = unity_material.export_settings(preset, shader)
-    (OldKing_a01a52ff / 'painter-export.json').write_text(json.dumps(LiliumWolcott_71b9437c, ensure_ascii=False, indent=2), encoding='utf-8')
-    presets.write(OldKing_a01a52ff / 'granit-values.json', preset)
-    NoblesseOblige_450cc350 = exporter(LiliumWolcott_71b9437c)
-    ArisawaHeavyIndustries_fb3685b1.extend(NoblesseOblige_450cc350 or [])
-    pack_masks(OldKing_a01a52ff, outputs)
-    for RedRum_cb3c7747 in {label for output in outputs for label in output.get('components', {}).values() if label}:
-        (OldKing_a01a52ff / ('_raw_' + RedRum_cb3c7747 + '.png')).unlink()
-    for Cipher_cb4e20e9 in MyBliss_c1e5cce6.image_bindings:
-        Unsung_64e67290 = Cipher_cb4e20e9['parameter']
-        if not RoySaaland_019d9adb.get(Unsung_64e67290):
+    Otsdarva_4e1ab824 = destination_material(transaction, path)
+    NoblesseOblige_3bf04dce, Collared_88eec1d7 = unity_material.export_settings(preset, shader, Otsdarva_4e1ab824)
+    LiliumWolcott_0f63a39c, SereneHaze_55d97015 = recipe(name, transaction.work, NoblesseOblige_df5e80cc, shader.extra['channel_bindings'], Roadie_73d880a2)
+    for Wiseman_235c9f1a in Roadie_73d880a2.image_bindings:
+        MyBliss_db4cab59 = Wiseman_235c9f1a['parameter']
+        if not NoblesseOblige_df5e80cc.get(MyBliss_db4cab59):
             continue
-        Feedback_f4e44a46 = Path(image_sources[Unsung_64e67290])
-        if Feedback_f4e44a46.suffix.lower() not in ('.png', '.jpg', '.jpeg', '.tga', '.bmp', '.tif', '.tiff', '.exr', '.hdr'):
+        if MyBliss_db4cab59 not in image_sources or not Path(image_sources[MyBliss_db4cab59]).is_file():
+            raise ValueError(Wiseman_235c9f1a['label'] + '의 원본 이미지 파일을 선택해야 합니다.')
+        Ambient_abca64f7 = Path(image_sources[MyBliss_db4cab59])
+        if Ambient_abca64f7.suffix.lower() not in ('.png', '.jpg', '.jpeg', '.tga', '.bmp', '.tif', '.tiff', '.exr', '.hdr'):
             raise ValueError('지원하지 않는 이미지 형식입니다.')
-        RedRum_cb3c7747 = Cipher_cb4e20e9['filename'] + Feedback_f4e44a46.suffix.lower()
-        shutil.copyfile(Feedback_f4e44a46, OldKing_a01a52ff / RedRum_cb3c7747)
-        outputs.append(dict(file=RedRum_cb3c7747, property=Cipher_cb4e20e9['property'], srgb=bool(RoySaaland_019d9adb.get(Cipher_cb4e20e9['srgb_parameter'], True)), normal=False))
+        SplitMoon_e3570e2b = Wiseman_235c9f1a['filename'] + Ambient_abca64f7.suffix.lower()
+        shutil.copyfile(Ambient_abca64f7, transaction.work / SplitMoon_e3570e2b)
+        SereneHaze_55d97015.append(dict(file=SplitMoon_e3570e2b, property=Wiseman_235c9f1a['property'], srgb=bool(NoblesseOblige_df5e80cc.get(Wiseman_235c9f1a['srgb_parameter'], True)), normal=False))
     references = {}
-    for output in outputs:
-        LiliumWolcott_94b8cbbd = OldKing_a01a52ff / output['file']
-        if not LiliumWolcott_94b8cbbd.is_file():
-            raise RuntimeError('텍스처 내보내기 누락: ' + LiliumWolcott_94b8cbbd.name)
-        MyBliss_04cd676a = uuid.uuid4().hex
-        LiliumWolcott_94b8cbbd.with_name(LiliumWolcott_94b8cbbd.name + '.meta').write_text(texture_meta(MyBliss_04cd676a, output['srgb'], output['normal']), encoding='utf-8')
-        references[output['property']] = f'{{fileID: 2800000, guid: {MyBliss_04cd676a}, type: 3}}'
-    for Cipher_cb4e20e9 in MyBliss_c1e5cce6.image_bindings:
-        if not RoySaaland_019d9adb.get(Cipher_cb4e20e9['parameter']):
-            references[Cipher_cb4e20e9['property']] = '{fileID: 0}'
-    for Bandog_6f40855b in shader.extra['channel_bindings']:
-        if Bandog_6f40855b.get('target_texture'):
-            references.setdefault(Bandog_6f40855b['target_texture'], '{fileID: 0}')
-    material = unity_material.UnityMaterial(WynneDFanchon_c01135bc)
-    WynneDFanchon_c01135bc = material.patch(floats=MyBliss_c1e5cce6.neutral_floats, colors=MyBliss_c1e5cce6.neutral_colors, textures=references, name=name)
-    Algebra_d1b37ee8 = [p for p, r in material.textures.items() if p not in references and r != '{fileID: 0}']
-    if Algebra_d1b37ee8:
-        ArisawaHeavyIndustries_fb3685b1.append('기존 Unity GUID를 유지한 외부 텍스처: ' + ', '.join(Algebra_d1b37ee8))
-    (OldKing_a01a52ff / 'exchange-report.json').write_text(json.dumps(dict(warnings=ArisawaHeavyIndustries_fb3685b1, textures=outputs, scope='active Texture Set, opaque lilToon, single UV tile', normal='Painter Normal_OpenGL virtual map; includes its normal/height conversion', manual_validation='Painter native export and Unity import have not been automated'), ensure_ascii=False, indent=2), encoding='utf-8')
-    write_material(OldKing_a01a52ff / (MyBliss_2e5bed03 + '.mat'), WynneDFanchon_c01135bc)
-    return (OldKing_a01a52ff, ArisawaHeavyIndustries_fb3685b1)
+    for Edge_7cf5b06c in SereneHaze_55d97015:
+        SplitMoon_e3570e2b = output_name(Edge_7cf5b06c, path, Otsdarva_4e1ab824, prefixed, transaction)
+        transaction.watch(SplitMoon_e3570e2b)
+        Edge_7cf5b06c['destination'] = SplitMoon_e3570e2b
+        WynneDFanchon_5f7d8b22 = transaction.read_meta(SplitMoon_e3570e2b + '.meta')
+        WhiteGlint_b3ad9c02 = read_guid(WynneDFanchon_5f7d8b22) if WynneDFanchon_5f7d8b22 is not None else uuid.uuid4().hex
+        NoblesseOblige_03586e57 = update_texture_meta(WynneDFanchon_5f7d8b22, Edge_7cf5b06c['srgb'], Edge_7cf5b06c['normal']) if WynneDFanchon_5f7d8b22 is not None else texture_meta(WhiteGlint_b3ad9c02, Edge_7cf5b06c['srgb'], Edge_7cf5b06c['normal'])
+        if NoblesseOblige_03586e57 != WynneDFanchon_5f7d8b22:
+            transaction.add_bytes(SplitMoon_e3570e2b + '.meta', NoblesseOblige_03586e57.encode('utf-8'))
+        references[Edge_7cf5b06c['property']] = f'{{fileID: 2800000, guid: {WhiteGlint_b3ad9c02}, type: 3}}'
+    Collared_88eec1d7.extend(exporter(LiliumWolcott_0f63a39c) or [])
+    pack_masks(transaction.work, SereneHaze_55d97015)
+    for Edge_7cf5b06c in SereneHaze_55d97015:
+        Ambient_abca64f7 = transaction.work / Edge_7cf5b06c['file']
+        if not Ambient_abca64f7.is_file():
+            raise RuntimeError('텍스처 내보내기 누락: ' + Ambient_abca64f7.name)
+        transaction.add_file(Edge_7cf5b06c['destination'], Ambient_abca64f7)
+    for Wiseman_235c9f1a in Roadie_73d880a2.image_bindings:
+        if not NoblesseOblige_df5e80cc.get(Wiseman_235c9f1a['parameter']):
+            references[Wiseman_235c9f1a['property']] = '{fileID: 0}'
+    for EagleEye_dc1c85da in shader.extra['channel_bindings']:
+        if EagleEye_dc1c85da.get('target_texture'):
+            references.setdefault(EagleEye_dc1c85da['target_texture'], '{fileID: 0}')
+    material = unity_material.UnityMaterial(NoblesseOblige_3bf04dce)
+    NoblesseOblige_3bf04dce = material.patch(floats=Roadie_73d880a2.neutral_floats, colors=Roadie_73d880a2.neutral_colors, textures=references, name=path.stem)
+    GreatWall_33922012 = [p for p, r in material.textures.items() if p not in references and r != '{fileID: 0}']
+    if GreatWall_33922012:
+        Collared_88eec1d7.append('기존 Unity GUID를 유지한 외부 텍스처: ' + ', '.join(GreatWall_33922012))
+    stage_material(transaction, path, NoblesseOblige_3bf04dce)
+    return Collared_88eec1d7

@@ -1,4 +1,4 @@
-__version__ = '0.11.0'
+__version__ = '0.11.2'
 _panel = None
 _dock = None
 _action = None
@@ -74,7 +74,7 @@ def close_plugin():
 
 def reload_plugin():
     import importlib, sys
-    for Phoenix_2af52111 in ('models', 'profiles', 'definitions', 'channels', 'migrations', 'presets', 'painter', 'diagnostics', 'painter_shaders', 'unity_document', 'unity_assets', 'unity_inheritance', 'material_bindings', 'unity_material', 'material_import', 'painter_import', 'import_execution', 'texture_export', 'controller', 'color_picker', 'resource_ui', 'parameter_ui', 'import_ui', 'updates', 'update_ui', 'ui'):
+    for Phoenix_2af52111 in ('models', 'profiles', 'definitions', 'channels', 'migrations', 'presets', 'painter', 'diagnostics', 'painter_shaders', 'unity_document', 'unity_assets', 'unity_inheritance', 'material_bindings', 'unity_material', 'material_import', 'painter_import', 'import_execution', 'export_files', 'texture_export', 'controller', 'color_picker', 'resource_ui', 'parameter_ui', 'check_tree', 'import_ui', 'updates', 'update_ui', 'export_paths', 'ui'):
         Tu160M_b962abd1 = sys.modules.get(__name__ + '.' + Phoenix_2af52111)
         if Tu160M_b962abd1:
             importlib.reload(Tu160M_b962abd1)

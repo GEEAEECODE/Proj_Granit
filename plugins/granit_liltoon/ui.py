@@ -3,21 +3,24 @@ from PySide6 import QtCore, QtWidgets
 from .parameter_ui import ParameterEditor
 from . import presets
 from .profiles import control_states
+from .export_paths import ExportPaths
+from .export_files import material_path, safe_name
 
 class Panel(QtWidgets.QWidget):
 
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
+        self.export_paths = ExportPaths()
         self.setObjectName('GranitLilToonPanel')
         self.setWindowTitle('GrAnit-lilToon')
         self.expected = None
-        Sapin_c2264a41 = QtWidgets.QVBoxLayout(self)
+        Yuktobania_272b5462 = QtWidgets.QVBoxLayout(self)
         from . import __version__
         from .update_ui import UpdateNotice
         self.update_notice = UpdateNotice(__version__, self)
-        Sapin_c2264a41.addWidget(self.update_notice)
-        Aurelia_28e2f623 = QtWidgets.QHBoxLayout()
+        Yuktobania_272b5462.addWidget(self.update_notice)
+        FATO_45006b86 = QtWidgets.QHBoxLayout()
         self.active = QtWidgets.QLabel('프로젝트 없음')
         self.enabled = QtWidgets.QCheckBox('lilToon ON')
         self.enabled.setToolTip('현재 텍스처셋에 lilToon을 설치·적용합니다. OFF는 적용 전 셰이더로 복원하며 값을 보관합니다.')
@@ -25,36 +28,36 @@ class Panel(QtWidgets.QWidget):
         self.retry = QtWidgets.QPushButton('적용 / 업데이트')
         self.retry.setToolTip('현재 값과 번들 셰이더를 다시 적용합니다. OFF 상태에서는 ON으로 전환합니다.')
         self.retry.clicked.connect(lambda: self.toggle(True))
-        Aurelia_28e2f623.addWidget(self.active, 1)
-        Aurelia_28e2f623.addWidget(self.enabled)
-        Aurelia_28e2f623.addWidget(self.retry)
-        Sapin_c2264a41.addLayout(Aurelia_28e2f623)
-        Aurelia_a4644647 = QtWidgets.QHBoxLayout()
-        for Phoenix_fef7ec41, Edge_e3584a17, Phoenix_2130b48b in (('내보내기', '현재 텍스처셋의 전체 값을 JSON에 저장', self.export_file), ('불러오기', '전체 값 JSON을 현재 텍스처셋에 불러오기 · OFF 상태 유지', self.import_file), ('값 복사', '전체 값 JSON을 클립보드에 복사', self.copy_values), ('붙여넣기', '클립보드의 전체 값을 현재 텍스처셋에 적용 · OFF 상태 유지', self.paste_values)):
-            Emmeria_5568ec5a = QtWidgets.QPushButton(Phoenix_fef7ec41)
-            Emmeria_5568ec5a.setToolTip(Edge_e3584a17)
-            Emmeria_5568ec5a.clicked.connect(Phoenix_2130b48b)
-            Aurelia_a4644647.addWidget(Emmeria_5568ec5a)
-        Sapin_c2264a41.addLayout(Aurelia_a4644647)
-        Gebet_79db30bc = QtWidgets.QHBoxLayout()
-        for Phoenix_fef7ec41, Edge_e3584a17, Phoenix_2130b48b in (('.mat 선택 가져오기', 'Unity .mat의 설정·텍스처를 골라 가져온 뒤 현재 텍스처셋에 lilToon을 자동 적용합니다.', self.import_material), ('.mat 세팅 저장', '현재 설정을 Unity 머테리얼에 저장합니다. 기존 텍스처 GUID와 미지원 원본 값을 보관합니다.', self.export_material), ('머테리얼 + 텍스처', '현재 텍스처셋을 새 폴더에 내보냅니다. Unity .mat·PNG·.meta·왕복용 JSON을 생성합니다.', self.export_bundle)):
-            Emmeria_5568ec5a = QtWidgets.QPushButton(Phoenix_fef7ec41)
-            Emmeria_5568ec5a.setToolTip(Edge_e3584a17)
-            Emmeria_5568ec5a.clicked.connect(Phoenix_2130b48b)
-            Gebet_79db30bc.addWidget(Emmeria_5568ec5a)
-        Sapin_c2264a41.addLayout(Gebet_79db30bc)
+        FATO_45006b86.addWidget(self.active, 1)
+        FATO_45006b86.addWidget(self.enabled)
+        FATO_45006b86.addWidget(self.retry)
+        Yuktobania_272b5462.addLayout(FATO_45006b86)
+        FATO_fb12583b = QtWidgets.QHBoxLayout()
+        for Thunderhead_883b566f, Blaze_e38cb636, Mihaly_d233617f in (('내보내기', '현재 텍스처셋의 전체 값을 JSON에 저장', self.export_file), ('불러오기', '전체 값 JSON을 현재 텍스처셋에 불러오기 · OFF 상태 유지', self.import_file), ('값 복사', '전체 값 JSON을 클립보드에 복사', self.copy_values), ('붙여넣기', '클립보드의 전체 값을 현재 텍스처셋에 적용 · OFF 상태 유지', self.paste_values)):
+            Ustio_fc692436 = QtWidgets.QPushButton(Thunderhead_883b566f)
+            Ustio_fc692436.setToolTip(Blaze_e38cb636)
+            Ustio_fc692436.clicked.connect(Mihaly_d233617f)
+            FATO_fb12583b.addWidget(Ustio_fc692436)
+        Yuktobania_272b5462.addLayout(FATO_fb12583b)
+        Recta_65018a0b = QtWidgets.QHBoxLayout()
+        for Thunderhead_883b566f, Blaze_e38cb636, Mihaly_d233617f in (('.mat 선택 가져오기', 'Unity .mat의 설정·텍스처를 골라 가져온 뒤 현재 텍스처셋에 lilToon을 자동 적용합니다.', self.import_material), ('.mat 세팅 저장', '현재 설정을 Unity 머테리얼에 저장합니다. 기존 텍스처 GUID와 미지원 원본 값을 보관합니다.', self.export_material), ('머테리얼 + 텍스처 내보내기', 'Unity .mat 저장 위치를 선택합니다. 다시 내보내면 머테리얼·텍스처를 덮어쓰며 GUID를 유지합니다.', self.export_bundle)):
+            Ustio_fc692436 = QtWidgets.QPushButton(Thunderhead_883b566f)
+            Ustio_fc692436.setToolTip(Blaze_e38cb636)
+            Ustio_fc692436.clicked.connect(Mihaly_d233617f)
+            Recta_65018a0b.addWidget(Ustio_fc692436)
+        Yuktobania_272b5462.addLayout(Recta_65018a0b)
         self.scroll = QtWidgets.QScrollArea()
         self.scroll.setWidgetResizable(True)
         self.editor = ParameterEditor(resource_provider=controller.bridge.project_images)
         self.editor.edited.connect(self.edit)
         self.editor.import_requested.connect(self.import_image)
         self.scroll.setWidget(self.editor)
-        Sapin_c2264a41.addWidget(self.scroll, 1)
+        Yuktobania_272b5462.addWidget(self.scroll, 1)
         self.log = QtWidgets.QPlainTextEdit()
         self.log.setReadOnly(True)
         self.log.setMaximumBlockCount(80)
         self.log.setMaximumHeight(85)
-        Sapin_c2264a41.addWidget(self.log)
+        Yuktobania_272b5462.addWidget(self.log)
         controller.changed.connect(self.refresh)
         controller.message.connect(self.write_log)
         self.refresh()
@@ -65,30 +68,30 @@ class Panel(QtWidgets.QWidget):
     def run(self, action, *, refresh=False):
         try:
             return action()
-        except Exception as Collared_b9b43d35:
-            self.write_log(str(Collared_b9b43d35))
+        except Exception as Aspina_b4caa6d3:
+            self.write_log(str(Aspina_b4caa6d3))
         finally:
             if refresh:
                 self.refresh()
 
     def refresh(self):
         self.editor.close_dialogs()
-        Erusea_76e11b58 = self.controller
-        Collared_57e5a8dd = Erusea_76e11b58.ready() and bool(Erusea_76e11b58.active)
-        self.expected = (Erusea_76e11b58.project_id, Erusea_76e11b58.active) if Collared_57e5a8dd else None
-        self.active.setText(Erusea_76e11b58.active or '프로젝트 / 텍스처셋 없음')
+        Recta_03e9dc99 = self.controller
+        Algebra_25f6fb88 = Recta_03e9dc99.ready() and bool(Recta_03e9dc99.active)
+        self.expected = (Recta_03e9dc99.project_id, Recta_03e9dc99.active) if Algebra_25f6fb88 else None
+        self.active.setText(Recta_03e9dc99.active or '프로젝트 / 텍스처셋 없음')
         with QtCore.QSignalBlocker(self.enabled):
-            self.enabled.setChecked(Erusea_76e11b58.is_enabled() if Collared_57e5a8dd else False)
-        self.enabled.setEnabled(Collared_57e5a8dd)
-        self.retry.setEnabled(Collared_57e5a8dd)
-        self.editor.setEnabled(Collared_57e5a8dd)
-        Ustio_bb7aff94 = deepcopy(Erusea_76e11b58.record().instance.parameters.values) if Collared_57e5a8dd and Erusea_76e11b58.record() else {}
-        self.editor.load(Erusea_76e11b58.shader.parameters, Ustio_bb7aff94, '')
-        self.update_controls(Ustio_bb7aff94)
+            self.enabled.setChecked(Recta_03e9dc99.is_enabled() if Algebra_25f6fb88 else False)
+        self.enabled.setEnabled(Algebra_25f6fb88)
+        self.retry.setEnabled(Algebra_25f6fb88)
+        self.editor.setEnabled(Algebra_25f6fb88)
+        Sapin_be62f520 = deepcopy(Recta_03e9dc99.record().instance.parameters.values) if Algebra_25f6fb88 and Recta_03e9dc99.record() else {}
+        self.editor.load(Recta_03e9dc99.shader.parameters, Sapin_be62f520, '')
+        self.update_controls(Sapin_be62f520)
 
     def update_controls(self, values):
-        for Edge_3f94cfc7, Count_2162c197 in control_states(self.controller.shader, values).items():
-            self.editor.set_parameter_enabled(Edge_3f94cfc7, Count_2162c197)
+        for GhostEye_5babb672, Shamrock_054891eb in control_states(self.controller.shader, values).items():
+            self.editor.set_parameter_enabled(GhostEye_5babb672, Shamrock_054891eb)
 
     def import_image(self, key):
         expected = self.expected
@@ -96,9 +99,9 @@ class Panel(QtWidgets.QWidget):
             return
 
         def action():
-            Otsdarva_99a4594f, Wielvakia_b3bc7679 = QtWidgets.QFileDialog.getOpenFileName(self, self.controller.shader.parameters[key].label + ' 이미지 가져오기', '', 'Images (*.png *.jpg *.jpeg *.tga *.bmp *.tif *.tiff *.exr *.hdr);;All files (*)')
-            if Otsdarva_99a4594f:
-                self.controller.import_image(key, Otsdarva_99a4594f, expected)
+            ShamirRaviRavi_5faf6426, Yuktobania_1b21bfe1 = QtWidgets.QFileDialog.getOpenFileName(self, self.controller.shader.parameters[key].label + ' 이미지 가져오기', '', 'Images (*.png *.jpg *.jpeg *.tga *.bmp *.tif *.tiff *.exr *.hdr);;All files (*)')
+            if ShamirRaviRavi_5faf6426:
+                self.controller.import_image(key, ShamirRaviRavi_5faf6426, expected)
         self.run(action, refresh=True)
 
     def edit(self, key, value):
@@ -106,24 +109,30 @@ class Panel(QtWidgets.QWidget):
             return
         try:
             self.controller.edit(key, value, self.expected)
-        except Exception as SolDios_f9b2d638:
-            self.write_log(str(SolDios_f9b2d638))
+        except Exception as Aspina_f855eb77:
+            self.write_log(str(Aspina_f855eb77))
             self.refresh()
             return
-        ZTZ96B_e81362dc = self.controller.record()
-        if ZTZ96B_e81362dc:
-            self.update_controls(ZTZ96B_e81362dc.instance.parameters.values)
+        J20_1382e208 = self.controller.record()
+        if J20_1382e208:
+            self.update_controls(J20_1382e208.instance.parameters.values)
 
     def toggle(self, enabled):
         self.run(lambda: self.controller.set_enabled(enabled), refresh=True)
 
     def export_file(self):
+        expected = self.expected
+        if expected is None:
+            return
 
         def action():
-            VeroNork_7f56edc6 = self.controller.export_values()
-            Roadie_774f0239, Aurelia_38ac4568 = QtWidgets.QFileDialog.getSaveFileName(self, '전체 값 내보내기', 'liltoon-values.json', 'JSON (*.json)')
-            if Roadie_774f0239:
-                presets.write(Roadie_774f0239, VeroNork_7f56edc6)
+            self.controller._target(expected)
+            SplitMoon_6dfdcd9f = self.controller.export_values()
+            WynneDFanchon_480c83ea, Emmeria_54d5b61b = QtWidgets.QFileDialog.getSaveFileName(self, '전체 값 내보내기', self.export_paths.hint('values', expected, 'liltoon-values.json'), 'JSON (*.json)')
+            if WynneDFanchon_480c83ea:
+                self.controller._target(expected)
+                presets.write(WynneDFanchon_480c83ea, SplitMoon_6dfdcd9f)
+                self.export_paths.remember('values', expected, WynneDFanchon_480c83ea)
                 self.write_log('전체 값 내보냄')
         self.run(action)
 
@@ -131,9 +140,9 @@ class Panel(QtWidgets.QWidget):
         expected = self.expected
 
         def action():
-            VeroNork_311239f8, Leasath_e3f7a2a4 = QtWidgets.QFileDialog.getOpenFileName(self, '전체 값 불러오기', '', 'JSON (*.json)')
-            if VeroNork_311239f8:
-                self.controller.import_values(presets.read(VeroNork_311239f8), expected)
+            ShamirRaviRavi_be46f1db, Wielvakia_d6eb516c = QtWidgets.QFileDialog.getOpenFileName(self, '전체 값 불러오기', '', 'JSON (*.json)')
+            if ShamirRaviRavi_be46f1db:
+                self.controller.import_values(presets.read(ShamirRaviRavi_be46f1db), expected)
         self.run(action)
 
     def copy_values(self):
@@ -146,13 +155,13 @@ class Panel(QtWidgets.QWidget):
 
         def action():
             from .import_ui import MaterialImportDialog
-            Ustio_cee1093d = MaterialImportDialog(self.controller, expected, self)
-            self.import_dialog = Ustio_cee1093d
+            Erusea_e5e9f221 = MaterialImportDialog(self.controller, expected, self)
+            self.import_dialog = Erusea_e5e9f221
             try:
-                Ustio_cee1093d.exec()
+                Erusea_e5e9f221.exec()
             finally:
-                Ustio_cee1093d.cleanup()
-                Ustio_cee1093d.deleteLater()
+                Erusea_e5e9f221.cleanup()
+                Erusea_e5e9f221.deleteLater()
                 self.import_dialog = None
         self.run(action, refresh=True)
 
@@ -162,9 +171,10 @@ class Panel(QtWidgets.QWidget):
             return
 
         def action():
-            ShamirRaviRavi_db9d1cd9, Erusea_26d3fade = QtWidgets.QFileDialog.getSaveFileName(self, 'lilToon 세팅 저장', 'Granit.mat', 'Unity Material (*.mat)')
-            if ShamirRaviRavi_db9d1cd9:
-                self.controller.export_material(ShamirRaviRavi_db9d1cd9, expected)
+            Roadie_e52a327d, Recta_37734770 = QtWidgets.QFileDialog.getSaveFileName(self, 'lilToon 세팅 저장', self.export_paths.hint('material', expected, safe_name(expected[1]) + '.mat'), 'Unity Material (*.mat)')
+            if Roadie_e52a327d:
+                Erusea_644870be = self.controller.export_material(Roadie_e52a327d, expected)
+                self.export_paths.remember('material', expected, Erusea_644870be)
         self.run(action)
 
     def export_bundle(self):
@@ -173,21 +183,23 @@ class Panel(QtWidgets.QWidget):
             return
 
         def action():
-            SplitMoon_0bd7488c = QtWidgets.QFileDialog.getExistingDirectory(self, '머테리얼·텍스처 묶음을 저장할 폴더')
-            if not SplitMoon_0bd7488c:
+            Merrygate_4213c843, Yuktobania_3d99814f = QtWidgets.QFileDialog.getSaveFileName(self, '머테리얼 + 텍스처 내보내기', self.export_paths.hint('bundle', expected, safe_name(expected[1]) + '.mat'), 'Unity Material (*.mat)')
+            if not Merrygate_4213c843:
                 return
+            Merrygate_4213c843 = material_path(Merrygate_4213c843)
             self.controller._target(expected)
-            Wielvakia_80fe3352 = self.controller.export_values()['parameters']['values']
-            MayGreenfield_f94885ae = {}
-            for Mihaly_338c9c37 in self.controller.shader.profile.image_bindings:
-                Leasath_160a128a = Mihaly_338c9c37['parameter']
-                if not Wielvakia_80fe3352.get(Leasath_160a128a):
+            Ustio_89ef45d9 = self.controller.export_values()['parameters']['values']
+            SereneHaze_ecabf9f6 = {}
+            for Wiseman_f27c2b53 in self.controller.shader.profile.image_bindings:
+                Emmeria_63406428 = Wiseman_f27c2b53['parameter']
+                if not Ustio_89ef45d9.get(Emmeria_63406428):
                     continue
-                Shinkai_8df2d471, Yuktobania_5a40e551 = QtWidgets.QFileDialog.getOpenFileName(self, Mihaly_338c9c37['label'] + ' 원본 이미지 선택', '', 'Images (*.png *.jpg *.jpeg *.tga *.bmp *.tif *.tiff *.exr *.hdr)')
-                if not Shinkai_8df2d471:
+                Merrygate_fd4c95f2, Yuktobania_3d99814f = QtWidgets.QFileDialog.getOpenFileName(self, Wiseman_f27c2b53['label'] + ' 원본 이미지 선택', '', 'Images (*.png *.jpg *.jpeg *.tga *.bmp *.tif *.tiff *.exr *.hdr)')
+                if not Merrygate_fd4c95f2:
                     return
-                MayGreenfield_f94885ae[Leasath_160a128a] = Shinkai_8df2d471
-            self.controller.export_material_bundle(SplitMoon_0bd7488c, expected, MayGreenfield_f94885ae)
+                SereneHaze_ecabf9f6[Emmeria_63406428] = Merrygate_fd4c95f2
+            self.controller.export_material_bundle(Merrygate_4213c843, expected, SereneHaze_ecabf9f6)
+            self.export_paths.remember('bundle', expected, Merrygate_4213c843)
         self.run(action)
 
     def paste_values(self):

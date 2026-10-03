@@ -53,13 +53,13 @@ def import_settings(material, preset, shader):
     MayGreenfield_ddd8c481['unity_import_report'] = {'applied': WhiteGlint_4df47692, 'warnings': LineArk_15621995, 'excluded': deepcopy(shader.extra.get('unity_policy', {}).get('excluded', [])), 'preserved_float_properties': sorted(set(material.floats) - set(WhiteGlint_4df47692))}
     return MayGreenfield_ddd8c481
 
-def export_settings(preset, shader):
+def export_settings(preset, shader, destination=None):
     require_supported_surface(shader)
     Roadie_075bef21 = preset.get('unity_material', {})
     OldKing_ed286b4c = shader.extra.get('default_material', {})
     SplitMoon_fc044695 = Roadie_075bef21.get('text') or OldKing_ed286b4c.get('text')
-    Thermidor_e7f35730 = UnityMaterial(SplitMoon_fc044695) if SplitMoon_fc044695 else blank()
-    Shinkai_d0e9730f = Roadie_075bef21.get('baseline', {}) if Roadie_075bef21.get('text') else OldKing_ed286b4c.get('parameters', {})
+    Thermidor_e7f35730 = destination if destination is not None else UnityMaterial(SplitMoon_fc044695) if SplitMoon_fc044695 else blank()
+    Shinkai_d0e9730f = {} if destination is not None else Roadie_075bef21.get('baseline', {}) if Roadie_075bef21.get('text') else OldKing_ed286b4c.get('parameters', {})
     LiliumWolcott_06a95730 = preset['parameters']['values']
     LiliumWolcott_eb1d721a = {}
     Merrygate_3bf39e72 = {}

@@ -178,46 +178,51 @@ class Controller(QtCore.QObject):
 
     def export_material(self, path, expected=None):
         from . import unity_material, texture_export
+        from .export_files import material_path
         self._target(expected)
         RoySaaland_8b47a495 = self.export_values()
-        VeroNork_49e9390e, SolDios_bf4a2a8b = unity_material.export_settings(RoySaaland_8b47a495, self.shader)
-        texture_export.write_material(path, VeroNork_49e9390e)
-        presets.write(str(path) + '.granit.json', RoySaaland_8b47a495)
+        path = material_path(path)
+        with texture_export.ExportTransaction(path.parent) as OmerScience_83645ae1:
+            J20_943dcfdc = texture_export.destination_material(OmerScience_83645ae1, path)
+            VeroNork_49e9390e, SolDios_bf4a2a8b = unity_material.export_settings(RoySaaland_8b47a495, self.shader, J20_943dcfdc)
+            texture_export.stage_material(OmerScience_83645ae1, path, VeroNork_49e9390e)
+            OmerScience_83645ae1.commit()
         for GlobalArmaments_f31bb662 in SolDios_bf4a2a8b:
             self.message.emit(GlobalArmaments_f31bb662)
         self.message.emit('lilToon .mat 세팅 내보냄 · 텍스처 원본 참조 유지')
+        return path
 
     def export_material_bundle(self, directory, expected=None, image_sources=None):
         from . import texture_export
-        Y20_193f75a6 = self._target(expected)
-        self.bridge.validate_texture_export(Y20_193f75a6, self.shader)
-        H6K_2186c2d2, Answerer_7ca131ba = texture_export.export_bundle(directory, Y20_193f75a6, self.export_values(), self.shader, self.bridge.export_textures, image_sources)
-        for Stigro_7d707849 in Answerer_7ca131ba:
-            self.message.emit(Stigro_7d707849)
-        self.message.emit('머테리얼·텍스처 내보냄: ' + str(H6K_2186c2d2))
-        return H6K_2186c2d2
+        ZTZ96B_db261ce5 = self._target(expected)
+        self.bridge.validate_texture_export(ZTZ96B_db261ce5, self.shader)
+        H6K_98b07845, InteriorUnion_a44b0f60 = texture_export.export_bundle(directory, ZTZ96B_db261ce5, self.export_values(), self.shader, self.bridge.export_textures, image_sources)
+        for SolDios_372d6aa3 in InteriorUnion_a44b0f60:
+            self.message.emit(SolDios_372d6aa3)
+        self.message.emit('머테리얼·텍스처 내보냄: ' + str(H6K_98b07845))
+        return H6K_98b07845
 
     def import_image(self, key, path, expected=None):
-        J35A_2b358808 = self._target(expected)
+        J16_2d28d4d4 = self._target(expected)
         if self.shader.parameters[key].data_type != 'ByteArray':
             raise ValueError('이미지 파라미터가 아닙니다.')
-        J35A_6dfc7e98 = (self.project_id, J35A_2b358808)
-        Unsung_24d743b6 = self.bridge.import_project_image(path)
-        self.edit(key, Unsung_24d743b6, J35A_6dfc7e98)
-        self.message.emit(f'{J35A_2b358808} · {self.shader.parameters[key].label} 이미지 가져옴')
-        return Unsung_24d743b6
+        J16_87478730 = (self.project_id, J16_2d28d4d4)
+        ShamirRaviRavi_b135da00 = self.bridge.import_project_image(path)
+        self.edit(key, ShamirRaviRavi_b135da00, J16_87478730)
+        self.message.emit(f'{J16_2d28d4d4} · {self.shader.parameters[key].label} 이미지 가져옴')
+        return ShamirRaviRavi_b135da00
 
     def import_values(self, data, expected=None):
-        J16_db5b0552 = self._target(expected)
-        data, J35A_c44705ca = presets.prepare(data, self.shader)
-        self.bridge.validate_resources(self.shader, J35A_c44705ca.values)
-        Y20_21a013db = self.record(J16_db5b0552, create=True)
-        Y20_21a013db.instance.parameters = J35A_c44705ca
-        Y20_21a013db.instance.name = data.get('name', 'lilToon')
+        ZTZ96B_dab47502 = self._target(expected)
+        data, J11B_fd248c5d = presets.prepare(data, self.shader)
+        self.bridge.validate_resources(self.shader, J11B_fd248c5d.values)
+        ZTZ99A_d25696ba = self.record(ZTZ96B_dab47502, create=True)
+        ZTZ99A_d25696ba.instance.parameters = J11B_fd248c5d
+        ZTZ99A_d25696ba.instance.name = data.get('name', 'lilToon')
         known = {'format', 'version', 'name', 'parameters'}
-        Y20_21a013db.instance.extra['preset_fields'] = {k: deepcopy(v) for k, v in data.items() if k not in known}
+        ZTZ99A_d25696ba.instance.extra['preset_fields'] = {k: deepcopy(v) for k, v in data.items() if k not in known}
         try:
-            self._send(J16_db5b0552, Y20_21a013db, J35A_c44705ca.values)
+            self._send(ZTZ96B_dab47502, ZTZ99A_d25696ba, J11B_fd248c5d.values)
         finally:
             self.sync(force=True)
-        self.message.emit(f'{J16_db5b0552} · 전체 값 불러옴')
+        self.message.emit(f'{ZTZ96B_dab47502} · 전체 값 불러옴')

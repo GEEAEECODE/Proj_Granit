@@ -4,6 +4,7 @@ from pathlib import Path
 from threading import Event
 from PySide6 import QtCore, QtWidgets
 from .material_import import inspect_material, prepare_selection
+from .check_tree import DragCheckTree
 
 class MaterialImportDialog(QtWidgets.QDialog):
 
@@ -21,43 +22,43 @@ class MaterialImportDialog(QtWidgets.QDialog):
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix='granit-material-import')
         self.setWindowTitle('lilToon .mat → Painter · 선택 가져오기')
         self.resize(1050, 700)
-        Belka_76d2d126 = QtWidgets.QVBoxLayout(self)
-        Gebet_a48a0e8e = QtWidgets.QLabel('대상 텍스처셋: ' + expected[1])
-        Gebet_a48a0e8e.setTextFormat(QtCore.Qt.TextFormat.PlainText)
-        Belka_76d2d126.addWidget(Gebet_a48a0e8e)
+        Wielvakia_ef384516 = QtWidgets.QVBoxLayout(self)
+        Sapin_f6cc414f = QtWidgets.QLabel('대상 텍스처셋: ' + expected[1])
+        Sapin_f6cc414f.setTextFormat(QtCore.Qt.TextFormat.PlainText)
+        Wielvakia_ef384516.addWidget(Sapin_f6cc414f)
         self.path = QtWidgets.QLineEdit()
         self.path.setPlaceholderText('Unity .mat 파일 — Material Variant 포함')
         self.root = QtWidgets.QLineEdit()
         self.root.setPlaceholderText('Unity 프로젝트 폴더 — 기본 자동 탐색')
         self.inputs = []
-        for Phoenix_77389701, Swordsman_d84e7ddc, ClosedPlan_81dd6809 in ((self.path, '.mat 선택', self.choose_material), (self.root, '프로젝트 폴더', self.choose_root)):
-            Ustio_f97ecaaf = QtWidgets.QHBoxLayout()
-            Ustio_f97ecaaf.addWidget(Phoenix_77389701, 1)
-            Nordennavic_4309622c = QtWidgets.QPushButton(Swordsman_d84e7ddc)
-            Nordennavic_4309622c.clicked.connect(ClosedPlan_81dd6809)
-            Ustio_f97ecaaf.addWidget(Nordennavic_4309622c)
-            Belka_76d2d126.addLayout(Ustio_f97ecaaf)
-            self.inputs.extend((Phoenix_77389701, Nordennavic_4309622c))
-        Nordennavic_f2d6acaf = QtWidgets.QHBoxLayout()
+        for LongCaster_b6e34a18, Archer_315029a9, ArteriaCranium_b01dd9bb in ((self.path, '.mat 선택', self.choose_material), (self.root, '프로젝트 폴더', self.choose_root)):
+            Sapin_0f815e5f = QtWidgets.QHBoxLayout()
+            Sapin_0f815e5f.addWidget(LongCaster_b6e34a18, 1)
+            Erusea_92c4fae0 = QtWidgets.QPushButton(Archer_315029a9)
+            Erusea_92c4fae0.clicked.connect(ArteriaCranium_b01dd9bb)
+            Sapin_0f815e5f.addWidget(Erusea_92c4fae0)
+            Wielvakia_ef384516.addLayout(Sapin_0f815e5f)
+            self.inputs.extend((LongCaster_b6e34a18, Erusea_92c4fae0))
+        Ustio_35e54669 = QtWidgets.QHBoxLayout()
         self.mode = QtWidgets.QComboBox()
         self.mode.addItem('Fill Layer (기본값)', 'fill')
         self.mode.addItem('프로젝트 에셋만', 'assets')
         self.mode.setToolTip('Fill: 채널별 새 레이어 / MatCap은 이미지 슬롯. 에셋만: 이미지 슬롯·레이어는 유지. 선택한 설정값은 두 방식 모두 적용하며, 가져오기 성공 시 현재 텍스처셋의 lilToon을 켭니다.')
         self.mode.currentIndexChanged.connect(self.update_rows)
-        Nordennavic_f2d6acaf.addWidget(QtWidgets.QLabel('텍스처 적용 방식'))
-        Nordennavic_f2d6acaf.addWidget(self.mode, 1)
+        Ustio_35e54669.addWidget(QtWidgets.QLabel('텍스처 적용 방식'))
+        Ustio_35e54669.addWidget(self.mode, 1)
         self.analyze_button = QtWidgets.QPushButton('다시 분석')
         self.analyze_button.clicked.connect(self.analyze)
-        Nordennavic_f2d6acaf.addWidget(self.analyze_button)
+        Ustio_35e54669.addWidget(self.analyze_button)
         self.inputs.extend((self.mode, self.analyze_button))
-        Belka_76d2d126.addLayout(Nordennavic_f2d6acaf)
-        Belka_1fa97365 = QtWidgets.QLabel('설정과 텍스처는 독립 선택합니다. 미선택 값/기존 레이어 유지. 텍스처는 원본 기준이며 Metallic·Smoothness·Normal·Base Color의 배율 설정은 가져오지 않습니다.')
-        Belka_1fa97365.setWordWrap(True)
-        Belka_76d2d126.addWidget(Belka_1fa97365)
-        Estovakia_47102f33 = QtWidgets.QLabel('가져오기가 완료되면 현재 텍스처셋에 lilToon을 자동 적용합니다. 기존 셰이더는 OFF 복원용으로 보관합니다.')
-        Estovakia_47102f33.setWordWrap(True)
-        Belka_76d2d126.addWidget(Estovakia_47102f33)
-        self.tree = QtWidgets.QTreeWidget()
+        Wielvakia_ef384516.addLayout(Ustio_35e54669)
+        Nordennavic_9eeb7431 = QtWidgets.QLabel('설정과 텍스처는 독립 선택합니다. 미선택 값/기존 레이어 유지. 텍스처는 원본 기준이며 Metallic·Smoothness·Normal·Base Color의 배율 설정은 가져오지 않습니다.')
+        Nordennavic_9eeb7431.setWordWrap(True)
+        Wielvakia_ef384516.addWidget(Nordennavic_9eeb7431)
+        Osea_b31370f4 = QtWidgets.QLabel('가져오기가 완료되면 현재 텍스처셋에 lilToon을 자동 적용합니다. 기존 셰이더는 OFF 복원용으로 보관합니다.')
+        Osea_b31370f4.setWordWrap(True)
+        Wielvakia_ef384516.addWidget(Osea_b31370f4)
+        self.tree = DragCheckTree()
         self.tree.setColumnCount(5)
         self.tree.setHeaderLabels(['선택 / 항목', 'Unity 속성', '값 / 파일', 'Painter 대상', '상태'])
         self.tree.setColumnWidth(0, 220)
@@ -65,29 +66,29 @@ class MaterialImportDialog(QtWidgets.QDialog):
         self.tree.setColumnWidth(2, 190)
         self.tree.setColumnWidth(3, 170)
         self.tree.itemChanged.connect(self.update_apply)
-        Belka_76d2d126.addWidget(self.tree, 1)
-        Ustio_f97ecaaf = QtWidgets.QHBoxLayout()
-        for Swordsman_d84e7ddc, checked in (('가능 항목 전체 선택', True), ('전체 해제', False)):
-            Nordennavic_4309622c = QtWidgets.QPushButton(Swordsman_d84e7ddc)
-            Nordennavic_4309622c.clicked.connect(lambda _=False, v=checked: self.select_all(v))
-            Ustio_f97ecaaf.addWidget(Nordennavic_4309622c)
-            self.inputs.append(Nordennavic_4309622c)
-        Ustio_f97ecaaf.addStretch()
-        Belka_76d2d126.addLayout(Ustio_f97ecaaf)
+        Wielvakia_ef384516.addWidget(self.tree, 1)
+        Sapin_0f815e5f = QtWidgets.QHBoxLayout()
+        for Archer_315029a9, checked in (('가능 항목 전체 선택', True), ('전체 해제', False)):
+            Erusea_92c4fae0 = QtWidgets.QPushButton(Archer_315029a9)
+            Erusea_92c4fae0.clicked.connect(lambda _=False, v=checked: self.select_all(v))
+            Sapin_0f815e5f.addWidget(Erusea_92c4fae0)
+            self.inputs.append(Erusea_92c4fae0)
+        Sapin_0f815e5f.addStretch()
+        Wielvakia_ef384516.addLayout(Sapin_0f815e5f)
         self.status = QtWidgets.QPlainTextEdit()
         self.status.setReadOnly(True)
         self.status.setMaximumHeight(110)
-        Belka_76d2d126.addWidget(self.status)
-        Belka_12ce13b5 = QtWidgets.QHBoxLayout()
-        Belka_12ce13b5.addStretch()
+        Wielvakia_ef384516.addWidget(self.status)
+        Wielvakia_54d84b86 = QtWidgets.QHBoxLayout()
+        Wielvakia_54d84b86.addStretch()
         self.apply_button = QtWidgets.QPushButton('선택 항목 가져오기')
         self.apply_button.setEnabled(False)
         self.apply_button.clicked.connect(self.prepare)
         self.close_button = QtWidgets.QPushButton('닫기 / 취소')
         self.close_button.clicked.connect(self.reject)
-        Belka_12ce13b5.addWidget(self.apply_button)
-        Belka_12ce13b5.addWidget(self.close_button)
-        Belka_76d2d126.addLayout(Belka_12ce13b5)
+        Wielvakia_54d84b86.addWidget(self.apply_button)
+        Wielvakia_54d84b86.addWidget(self.close_button)
+        Wielvakia_ef384516.addLayout(Wielvakia_54d84b86)
         self.timer = QtCore.QTimer(self)
         self.timer.setInterval(80)
         self.timer.timeout.connect(self.poll)
@@ -105,15 +106,15 @@ class MaterialImportDialog(QtWidgets.QDialog):
         self.update_apply()
 
     def choose_material(self):
-        Thermidor_cbec6b6f, Osea_9988649c = QtWidgets.QFileDialog.getOpenFileName(self, 'Unity .mat 선택', '', 'Unity Material (*.mat)')
-        if Thermidor_cbec6b6f:
-            self.path.setText(Thermidor_cbec6b6f)
+        SereneHaze_2fda7967, Osea_5f6eb022 = QtWidgets.QFileDialog.getOpenFileName(self, 'Unity .mat 선택', '', 'Unity Material (*.mat)')
+        if SereneHaze_2fda7967:
+            self.path.setText(SereneHaze_2fda7967)
             self.analyze()
 
     def choose_root(self):
-        Unsung_0329e1a1 = QtWidgets.QFileDialog.getExistingDirectory(self, 'Assets / ProjectSettings가 있는 Unity 프로젝트 폴더')
-        if Unsung_0329e1a1:
-            self.root.setText(Unsung_0329e1a1)
+        Otsdarva_a1be5e13 = QtWidgets.QFileDialog.getExistingDirectory(self, 'Assets / ProjectSettings가 있는 Unity 프로젝트 폴더')
+        if Otsdarva_a1be5e13:
+            self.root.setText(Otsdarva_a1be5e13)
             self.analyze()
 
     def check_context(self):
@@ -121,16 +122,16 @@ class MaterialImportDialog(QtWidgets.QDialog):
             return
         try:
             self.c._target(self.expected)
-        except Exception as ArteriaCarpals_feafc518:
+        except Exception as Collared_17aa81f2:
             self.invalid = True
             self.cancel.set()
             self.apply_button.setEnabled(False)
-            self.status.setPlainText(str(ArteriaCarpals_feafc518) + '\n창을 닫고 현재 대상에서 다시 여세요.')
+            self.status.setPlainText(str(Collared_17aa81f2) + '\n창을 닫고 현재 대상에서 다시 여세요.')
             self.busy(False)
 
     def busy(self, value):
-        for Aurelia_2b602f28 in self.inputs:
-            Aurelia_2b602f28.setEnabled(not value and (not self.invalid))
+        for Nordennavic_8321a69f in self.inputs:
+            Nordennavic_8321a69f.setEnabled(not value and (not self.invalid))
         self.tree.setEnabled(not value and (not self.invalid))
         self.update_apply()
 
@@ -158,39 +159,40 @@ class MaterialImportDialog(QtWidgets.QDialog):
     def populate(self):
         self.rows = {}
         self.tree.clear()
-        Erusea_faaf3b95 = {}
+        Yuktobania_21777bab = {}
         with QtCore.QSignalBlocker(self.tree):
-            for Archer_068213d7 in self.plan.items:
-                Wielvakia_40fec7df = '설정 · ' + Archer_068213d7.group if Archer_068213d7.kind == 'setting' else Archer_068213d7.group
-                if Wielvakia_40fec7df not in Erusea_faaf3b95:
-                    Erusea_faaf3b95[Wielvakia_40fec7df] = QtWidgets.QTreeWidgetItem(self.tree, [Wielvakia_40fec7df])
-                    Erusea_faaf3b95[Wielvakia_40fec7df].setExpanded(Archer_068213d7.kind == 'texture')
-                Nordennavic_d7f36980 = str(Archer_068213d7.value) if Archer_068213d7.kind == 'setting' else Path(Archer_068213d7.asset.path).name if Archer_068213d7.asset else ''
-                Recta_51c05ff8 = Archer_068213d7.target.get('channel', Archer_068213d7.target.get('parameter', ''))
-                if Archer_068213d7.target.get('enabled_parameter'):
-                    Recta_51c05ff8 += ' · 사용 체크 ON'
-                Erusea_36494089 = QtWidgets.QTreeWidgetItem(Erusea_faaf3b95[Wielvakia_40fec7df], [Archer_068213d7.label, Archer_068213d7.property, Nordennavic_d7f36980, Recta_51c05ff8, ''])
-                for Swordsman_ccd6bd9c in (1, 2, 3):
-                    Erusea_36494089.setToolTip(Swordsman_ccd6bd9c, Erusea_36494089.text(Swordsman_ccd6bd9c))
-                if Archer_068213d7.origin:
-                    Erusea_36494089.setToolTip(1, Archer_068213d7.property + '\n값 출처: ' + Archer_068213d7.origin)
-                if Archer_068213d7.asset:
-                    Erusea_36494089.setToolTip(2, Archer_068213d7.asset.path)
-                Erusea_36494089.setFlags(Erusea_36494089.flags() | QtCore.Qt.ItemFlag.ItemIsUserCheckable)
-                Erusea_36494089.setCheckState(0, QtCore.Qt.CheckState.Unchecked)
-                self.rows[Archer_068213d7.key] = (Archer_068213d7, Erusea_36494089)
+            for Count_8f428d09 in self.plan.items:
+                Estovakia_20e3be34 = '설정 · ' + Count_8f428d09.group if Count_8f428d09.kind == 'setting' else Count_8f428d09.group
+                if Estovakia_20e3be34 not in Yuktobania_21777bab:
+                    Yuktobania_21777bab[Estovakia_20e3be34] = QtWidgets.QTreeWidgetItem(self.tree, [Estovakia_20e3be34])
+                    Yuktobania_21777bab[Estovakia_20e3be34].setExpanded(True)
+                Nordennavic_652a1c79 = str(Count_8f428d09.value) if Count_8f428d09.kind == 'setting' else Path(Count_8f428d09.asset.path).name if Count_8f428d09.asset else ''
+                Recta_44fb3de9 = Count_8f428d09.target.get('channel', Count_8f428d09.target.get('parameter', ''))
+                if Count_8f428d09.target.get('enabled_parameter'):
+                    Recta_44fb3de9 += ' · 사용 체크 ON'
+                Yuktobania_4394bf45 = QtWidgets.QTreeWidgetItem(Yuktobania_21777bab[Estovakia_20e3be34], [Count_8f428d09.label, Count_8f428d09.property, Nordennavic_652a1c79, Recta_44fb3de9, ''])
+                for Pixy_f0f309d7 in (1, 2, 3):
+                    Yuktobania_4394bf45.setToolTip(Pixy_f0f309d7, Yuktobania_4394bf45.text(Pixy_f0f309d7))
+                if Count_8f428d09.origin:
+                    Yuktobania_4394bf45.setToolTip(1, Count_8f428d09.property + '\n값 출처: ' + Count_8f428d09.origin)
+                if Count_8f428d09.asset:
+                    Yuktobania_4394bf45.setToolTip(2, Count_8f428d09.asset.path)
+                Yuktobania_4394bf45.setFlags(Yuktobania_4394bf45.flags() | QtCore.Qt.ItemFlag.ItemIsUserCheckable)
+                Yuktobania_4394bf45.setCheckState(0, QtCore.Qt.CheckState.Unchecked)
+                self.rows[Count_8f428d09.key] = (Count_8f428d09, Yuktobania_4394bf45)
         self.update_rows()
         self.status.setPlainText('\n'.join(self.plan.warnings) or '분석 완료. 가져올 설정과 텍스처만 체크하세요.')
 
     def update_rows(self):
+        self.tree.cancel_paint()
         with QtCore.QSignalBlocker(self.tree):
-            for Bandog_749c6b10, Pixy_db67e754 in self.rows.values():
-                SpiritOfMotherwill_86636107 = Bandog_749c6b10.error or (Bandog_749c6b10.fill_error if self.mode.currentData() == 'fill' else '')
-                Pixy_db67e754.setDisabled(bool(SpiritOfMotherwill_86636107))
-                Pixy_db67e754.setText(4, SpiritOfMotherwill_86636107 or '선택 가능')
-                Pixy_db67e754.setToolTip(4, SpiritOfMotherwill_86636107)
-                if SpiritOfMotherwill_86636107:
-                    Pixy_db67e754.setCheckState(0, QtCore.Qt.CheckState.Unchecked)
+            for LongCaster_9191bd7d, Blaze_6862d40a in self.rows.values():
+                Collared_4df382bc = LongCaster_9191bd7d.error or (LongCaster_9191bd7d.fill_error if self.mode.currentData() == 'fill' else '')
+                Blaze_6862d40a.setDisabled(bool(Collared_4df382bc))
+                Blaze_6862d40a.setText(4, Collared_4df382bc or '선택 가능')
+                Blaze_6862d40a.setToolTip(4, Collared_4df382bc)
+                if Collared_4df382bc:
+                    Blaze_6862d40a.setCheckState(0, QtCore.Qt.CheckState.Unchecked)
         self.update_apply()
 
     def keys(self):
@@ -198,9 +200,9 @@ class MaterialImportDialog(QtWidgets.QDialog):
 
     def select_all(self, checked):
         with QtCore.QSignalBlocker(self.tree):
-            for Cipher_77c83070, Shamrock_0ee2a979 in self.rows.values():
-                if not Shamrock_0ee2a979.isDisabled():
-                    Shamrock_0ee2a979.setCheckState(0, QtCore.Qt.CheckState.Checked if checked else QtCore.Qt.CheckState.Unchecked)
+            for Mihaly_fe49a952, Pixy_07207f35 in self.rows.values():
+                if not Pixy_07207f35.isDisabled():
+                    Pixy_07207f35.setCheckState(0, QtCore.Qt.CheckState.Checked if checked else QtCore.Qt.CheckState.Unchecked)
         self.update_apply()
 
     def update_apply(self, *_args):
@@ -218,28 +220,28 @@ class MaterialImportDialog(QtWidgets.QDialog):
         self.check_context()
         if not self.future or not self.future.done():
             return
-        SpiritOfMotherwill_d3de65e6 = self.future
+        Algebra_1500344a = self.future
         self.future = None
         self.timer.stop()
         try:
-            Recta_51f12e8d = SpiritOfMotherwill_d3de65e6.result()
+            Wielvakia_280c412d = Algebra_1500344a.result()
             if self.closed or self.invalid or self.cancel.is_set():
                 return
             if self.job == 'analyze':
-                self.plan = Recta_51f12e8d
+                self.plan = Wielvakia_280c412d
                 self.populate()
             else:
-                Aurelia_53fceae6, Feedback_5ee49ff1 = Recta_51f12e8d
+                Emmeria_3722ece1, SereneHaze_37d2629b = Wielvakia_280c412d
                 if self.mode.currentData() != self.selection_mode:
                     raise ValueError('적용 방식이 바뀌었습니다. 다시 선택하세요.')
                 self.c._target(self.expected)
                 self.status.setPlainText('Painter에 선택 항목 적용 중…')
-                self.c.import_selection(self.plan, self.selection, self.selection_mode, Feedback_5ee49ff1, self.expected)
+                self.c.import_selection(self.plan, self.selection, self.selection_mode, SereneHaze_37d2629b, self.expected)
                 self.accept()
-        except Exception as BigBox_2043f1e2:
+        except Exception as ArteriaCranium_3b0cbc3b:
             if not self.closed:
-                self.status.setPlainText(str(BigBox_2043f1e2))
-            self.c.message.emit('선택 가져오기: ' + str(BigBox_2043f1e2))
+                self.status.setPlainText(str(ArteriaCranium_3b0cbc3b))
+            self.c.message.emit('선택 가져오기: ' + str(ArteriaCranium_3b0cbc3b))
         finally:
             if not self.closed:
                 self.busy(False)
@@ -247,6 +249,7 @@ class MaterialImportDialog(QtWidgets.QDialog):
     def cleanup(self, *_args):
         if self.closed:
             return
+        self.tree.cancel_paint()
         self.closed = True
         self.cancel.set()
         self.timer.stop()
