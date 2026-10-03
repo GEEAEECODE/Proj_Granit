@@ -1,4 +1,4 @@
-__version__ = '0.11.2'
+__version__ = '1.0.0'
 _panel = None
 _dock = None
 _action = None
