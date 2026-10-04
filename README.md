@@ -101,6 +101,10 @@ Outline, 전용 헤어·피부 셰이딩, 반투명·굴절은 아직 지원하�
 
 업데이트는 Painter 실행 후 플러그인이 처음 시작할 때 한 번 확인하고, 새 버전이 있으면 창 위에 알려줌.
 
+## EULA
+
+[EULA 전문 보기](EULA.txt)
+
 ## License
 
 Original GrAnit code and documentation owned by GEEAEECODE: **CC0-1.0**. See [LICENSE](LICENSE).
