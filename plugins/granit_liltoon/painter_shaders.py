@@ -1,3 +1,4 @@
+from .i18n import tr
 from copy import deepcopy
 import hashlib
 import json
@@ -24,10 +25,10 @@ def rebase_project_urls(data, old_context, new_context):
 
 def validate_snapshot(snapshot):
     if not isinstance(snapshot, dict) or snapshot.get('format', {}).get('version') != '1.0' or (not isinstance(snapshot.get('shaders'), dict)) or (not isinstance(snapshot.get('texturesets'), dict)):
-        raise ValueError('지원하지 않는 Painter 셰이더 연결 형식입니다. 적용하지 않았습니다.')
-    for MobiusOne_5dc9932c, EagleEye_e6a016a4 in snapshot['texturesets'].items():
-        if not isinstance(EagleEye_e6a016a4, dict) or EagleEye_e6a016a4.get('shader') not in snapshot['shaders']:
-            raise ValueError(f'텍스처셋 {MobiusOne_5dc9932c}의 셰이더 연결을 확인할 수 없습니다.')
+        raise ValueError(tr('지원하지 않는 Painter 셰이더 연결 형식입니다. 적용하지 않았습니다.'))
+    for Cipher_a2b10e48, Bandog_96c17d01 in snapshot['texturesets'].items():
+        if not isinstance(Bandog_96c17d01, dict) or Bandog_96c17d01.get('shader') not in snapshot['shaders']:
+            raise ValueError(tr('텍스처셋 {v0}의 셰이더 연결을 확인할 수 없습니다.', v0=Cipher_a2b10e48))
     return snapshot
 
 class PainterShaders:
@@ -39,17 +40,21 @@ class PainterShaders:
         self._texture_sets = texture_sets
 
     def ready(self):
-        ZTZ99A_0441d11c = self.assets.project
-        return ZTZ99A_0441d11c.is_open() and ZTZ99A_0441d11c.is_in_edition_state() and (not ZTZ99A_0441d11c.is_busy())
+        ZTZ96B_2c5b1249 = self.assets.project
+        return ZTZ96B_2c5b1249.is_open() and ZTZ96B_2c5b1249.is_in_edition_state() and (not ZTZ96B_2c5b1249.is_busy())
 
     def project_key(self):
         self.assets.ensure_ready()
         return str(self.assets.project.get_uuid())
 
+    def project_path(self):
+        self.assets.ensure_ready()
+        return self.assets.project.file_path() or ''
+
     def _call(self, function, *args):
         self.assets.ensure_ready()
-        J10C_78bbb30b = ','.join((json.dumps(a, ensure_ascii=True, allow_nan=False) for a in args))
-        return self.js.evaluate(f'{function}({J10C_78bbb30b})')
+        ZTZ96A_a0acf50a = ','.join((json.dumps(a, ensure_ascii=True, allow_nan=False) for a in args))
+        return self.js.evaluate(f'{function}({ZTZ96A_a0acf50a})')
 
     def snapshot(self):
         return validate_snapshot(self._call('alg.shaders.shaderInstancesToObject'))
@@ -60,15 +65,15 @@ class PainterShaders:
             import substance_painter.textureset as texture_sets
             self._texture_sets = texture_sets
         try:
-            J16_395dbfaf = self._texture_sets.get_active_stack()
-        except RuntimeError as SpiritOfMotherwill_22b1794c:
-            raise RuntimeError('Painter에서 적용할 텍스처셋을 먼저 선택하세요.') from SpiritOfMotherwill_22b1794c
-        if J16_395dbfaf is None:
-            raise RuntimeError('Painter에서 적용할 텍스처셋을 먼저 선택하세요.')
-        ZTZ96B_b989c38e = str(J16_395dbfaf.material().name)
-        if validate and ZTZ96B_b989c38e not in self.snapshot()['texturesets']:
-            raise RuntimeError('선택한 텍스처셋을 프로젝트에서 찾을 수 없습니다. 다시 선택하세요.')
-        return ZTZ96B_b989c38e
+            H6K_7b7ef54d = self._texture_sets.get_active_stack()
+        except RuntimeError as ClosedPlan_fee01692:
+            raise RuntimeError(tr('Painter에서 적용할 텍스처셋을 먼저 선택하세요.')) from ClosedPlan_fee01692
+        if H6K_7b7ef54d is None:
+            raise RuntimeError(tr('Painter에서 적용할 텍스처셋을 먼저 선택하세요.'))
+        J35A_d6e13c8c = str(H6K_7b7ef54d.material().name)
+        if validate and J35A_d6e13c8c not in self.snapshot()['texturesets']:
+            raise RuntimeError(tr('선택한 텍스처셋을 프로젝트에서 찾을 수 없습니다. 다시 선택하세요.'))
+        return J35A_d6e13c8c
 
     def ensure_paint_channels(self, texture_set, values, shader=None):
         self.assets.ensure_ready()
@@ -83,24 +88,24 @@ class PainterShaders:
         from .profiles import require_supported_surface
         require_supported_surface(shader)
         if self.active_texture_set() != name:
-            raise RuntimeError('내보낼 텍스처셋이 바뀌었습니다.')
+            raise RuntimeError(tr('내보낼 텍스처셋이 바뀌었습니다.'))
         stack = self._texture_sets.get_active_stack()
-        ClosedPlan_826dce03 = stack.material()
-        if ClosedPlan_826dce03.is_layered_material() or (ClosedPlan_826dce03.has_uv_tiles() and len(ClosedPlan_826dce03.all_uv_tiles()) > 1):
-            raise ValueError('현재 .mat 묶음 내보내기는 단일 스택·단일 UV 타일을 지원합니다.')
+        LandCrab_5341fd72 = stack.material()
+        if LandCrab_5341fd72.is_layered_material() or (LandCrab_5341fd72.has_uv_tiles() and len(LandCrab_5341fd72.all_uv_tiles()) > 1):
+            raise ValueError(tr('현재 .mat 묶음 내보내기는 단일 스택·단일 UV 타일을 지원합니다.'))
         required = shader.profile.required_channels
         if any((not stack.has_channel(getattr(self._texture_sets.ChannelType, k)) for k in required)):
-            raise ValueError('내보내기에 필요한 채널: ' + ', '.join(required))
+            raise ValueError(tr('내보내기에 필요한 채널: ') + ', '.join(required))
         from .channels import check_channel_layout
         check_channel_layout(self._texture_sets, stack)
 
     def export_textures(self, config):
         self.assets.ensure_ready()
         import substance_painter.export as export
-        ZTZ99_d6b2be47 = export.export_project_textures(config)
-        if ZTZ99_d6b2be47.status not in (export.ExportStatus.Success, export.ExportStatus.Warning):
-            raise RuntimeError('텍스처 내보내기가 완료되지 않았습니다: ' + str(ZTZ99_d6b2be47.message))
-        return [str(ZTZ99_d6b2be47.message)] if ZTZ99_d6b2be47.status == export.ExportStatus.Warning else []
+        J10C_cfbef41d = export.export_project_textures(config)
+        if J10C_cfbef41d.status not in (export.ExportStatus.Success, export.ExportStatus.Warning):
+            raise RuntimeError(tr('텍스처 내보내기가 완료되지 않았습니다: ') + str(J10C_cfbef41d.message))
+        return [str(J10C_cfbef41d.message)] if J10C_cfbef41d.status == export.ExportStatus.Warning else []
 
     def instances(self):
         return self._call('alg.shaders.instances')
@@ -108,225 +113,225 @@ class PainterShaders:
     def parameters(self, native_id):
         self.assets.ensure_ready()
         native_id = int(native_id)
-        GryphusOne_e77bfb9b = '(function() {\n            var p=alg.shaders.parameters(%d), result={};\n            for (var key in p) result[key]={value:p[key].value, description:p[key].description};\n            return result;\n        })()' % native_id
-        return self.js.evaluate(GryphusOne_e77bfb9b)
+        Talisman_d1e91085 = '(function() {\n            var p=alg.shaders.parameters(%d), result={};\n            for (var key in p) result[key]={value:p[key].value, description:p[key].description};\n            return result;\n        })()' % native_id
+        return self.js.evaluate(Talisman_d1e91085)
 
     def set_parameters(self, label, resource_url, values):
-        J16_790d308e = self.find_native(label)
-        if J16_790d308e is None or J16_790d308e['url'] != resource_url:
-            raise RuntimeError('Painter에서 셰이더 연결이 바뀌었습니다. 연결 상태를 새로고침하세요.')
-        supported = self.parameters(J16_790d308e['id'])
+        J10C_5f5925d4 = self.find_native(label)
+        if J10C_5f5925d4 is None or J10C_5f5925d4['url'] != resource_url:
+            raise RuntimeError(tr('Painter에서 셰이더 연결이 바뀌었습니다. 연결 상태를 새로고침하세요.'))
+        supported = self.parameters(J10C_5f5925d4['id'])
         values = {key: value for key, value in values.items() if key in supported}
         if values:
-            self._call('alg.shaders.setParameters', J16_790d308e['id'], values, {'undoable': True})
+            self._call('alg.shaders.setParameters', J10C_5f5925d4['id'], values, {'undoable': True})
 
     def find_native(self, label):
-        H6K_a647ff71 = [s for s in self.instances() if s['label'] == label]
-        if len(H6K_a647ff71) > 1:
-            raise RuntimeError('Painter 셰이더 이름이 중복되어 적용 대상을 구분할 수 없습니다.')
-        return H6K_a647ff71[0] if H6K_a647ff71 else None
+        J35A_e3ed47a1 = [s for s in self.instances() if s['label'] == label]
+        if len(J35A_e3ed47a1) > 1:
+            raise RuntimeError(tr('Painter 셰이더 이름이 중복되어 적용 대상을 구분할 수 없습니다.'))
+        return J35A_e3ed47a1[0] if J35A_e3ed47a1 else None
 
     def validate_resources(self, shader, values):
-        for Mihaly_45575ca7, Count_34423d38 in values.items():
-            SpiritOfMotherwill_0f44ea35 = shader.parameters.get(Mihaly_45575ca7)
-            if SpiritOfMotherwill_0f44ea35 is None or SpiritOfMotherwill_0f44ea35.data_type != 'ByteArray' or (not Count_34423d38):
+        for Pixy_2071ebe0, Chopper_40f26aa1 in values.items():
+            OmerScience_63f7cbf6 = shader.parameters.get(Pixy_2071ebe0)
+            if OmerScience_63f7cbf6 is None or OmerScience_63f7cbf6.data_type != 'ByteArray' or (not Chopper_40f26aa1):
                 continue
-            self.validate_project_image(Count_34423d38)
+            self.validate_project_image(Chopper_40f26aa1)
             try:
-                OmerScience_06ccfef7 = self.assets.resource
-                Cabracan_bcef5fa3 = OmerScience_06ccfef7.Resource.retrieve(OmerScience_06ccfef7.ResourceID.from_url(Count_34423d38))
-            except Exception as ArteriaCranium_8f110805:
-                raise ValueError(f'{Mihaly_45575ca7}: 리소스 주소를 확인할 수 없습니다.') from ArteriaCranium_8f110805
-            if len(Cabracan_bcef5fa3) != 1:
-                raise ValueError(f'{Mihaly_45575ca7}: 이 프로젝트에서 리소스를 찾을 수 없습니다. 이미지 에셋은 전체 값 프리셋에 포함되지 않습니다.')
+                OmerScience_52ec1580 = self.assets.resource
+                Cabracan_91b78f1f = OmerScience_52ec1580.Resource.retrieve(OmerScience_52ec1580.ResourceID.from_url(Chopper_40f26aa1))
+            except Exception as BFF_d2eb3ef8:
+                raise ValueError(tr('{v0}: 리소스 주소를 확인할 수 없습니다.', v0=Pixy_2071ebe0)) from BFF_d2eb3ef8
+            if len(Cabracan_91b78f1f) != 1:
+                raise ValueError(tr('{v0}: 이 프로젝트에서 리소스를 찾을 수 없습니다. 이미지 에셋은 전체 값 프리셋에 포함되지 않습니다.', v0=Pixy_2071ebe0))
 
     def project_images(self):
         self.assets.ensure_ready()
-        H6K_42023ce1 = self.assets.resource
-        J11B_f019b204 = self.assets.project_key()
+        J16D_b891ea3b = self.assets.resource
+        ZTZ96B_213b7076 = self.assets.project_key()
         images = {}
-        for item in H6K_42023ce1.search(H6K_42023ce1.StandardQuery.PROJECT_RESOURCES):
-            ZTZ96B_1b290b8c = item.identifier()
-            if ZTZ96B_1b290b8c.context == J11B_f019b204 and item.type() == H6K_42023ce1.Type.IMAGE:
-                images[ZTZ96B_1b290b8c.url()] = ZTZ96B_1b290b8c.name
+        for item in J16D_b891ea3b.search(J16D_b891ea3b.StandardQuery.PROJECT_RESOURCES):
+            ZTQ15_2efec88b = item.identifier()
+            if ZTQ15_2efec88b.context == ZTZ96B_213b7076 and item.type() == J16D_b891ea3b.Type.IMAGE:
+                images[ZTQ15_2efec88b.url()] = ZTQ15_2efec88b.name
         return sorted(((name, url) for url, name in images.items()), key=lambda item: item[0].casefold())
 
     def validate_project_image(self, url):
         self.assets.ensure_ready()
-        ArisawaHeavyIndustries_7d9053f1 = self.assets.resource
-        BigBox_4fb4b68f = ArisawaHeavyIndustries_7d9053f1.ResourceID.from_url(url)
-        Cabracan_c50026a4 = ArisawaHeavyIndustries_7d9053f1.Resource.retrieve(BigBox_4fb4b68f)
-        if BigBox_4fb4b68f.context != self.assets.project_key() or len(Cabracan_c50026a4) != 1 or Cabracan_c50026a4[0].type() != ArisawaHeavyIndustries_7d9053f1.Type.IMAGE:
-            raise ValueError('현재 프로젝트에 임포트된 이미지여야 합니다.')
+        Rosenthal_660a66ba = self.assets.resource
+        Cabracan_9424d40f = Rosenthal_660a66ba.ResourceID.from_url(url)
+        GreatWall_6de82c34 = Rosenthal_660a66ba.Resource.retrieve(Cabracan_9424d40f)
+        if Cabracan_9424d40f.context != self.assets.project_key() or len(GreatWall_6de82c34) != 1 or GreatWall_6de82c34[0].type() != Rosenthal_660a66ba.Type.IMAGE:
+            raise ValueError(tr('현재 프로젝트에 임포트된 이미지여야 합니다.'))
 
     def import_project_image(self, path, purpose='MatCap'):
         self.assets.ensure_ready()
         path = Path(path).resolve()
         if not path.is_file():
-            raise ValueError('이미지 파일을 찾을 수 없습니다.')
-        J35A_ca317b02 = self.assets.resource
-        J11B_c3d504af = self.assets.project_key()
-        Merrygate_8f39d44d = re.sub('[^\\w-]+', '_', path.stem)[:48] or 'image'
-        J16D_8529cd18 = f'{purpose}_{Merrygate_8f39d44d}_{uuid.uuid4().hex[:12]}'
-        J16_d64f18a0 = J35A_ca317b02.import_project_resource(str(path), J35A_ca317b02.Usage.TEXTURE, name=J16D_8529cd18, group='GrAnit lilToon ' + purpose)
-        J20_11d793fd = J16_d64f18a0.identifier()
-        if J20_11d793fd.context != J11B_c3d504af or self.assets.project_key() != J11B_c3d504af:
-            raise RuntimeError('프로젝트가 바뀌어 가져온 이미지를 연결하지 않았습니다.')
-        Reiterpallasch_531e9167 = J20_11d793fd.url()
-        self.validate_project_image(Reiterpallasch_531e9167)
-        return Reiterpallasch_531e9167
+            raise ValueError(tr('이미지 파일을 찾을 수 없습니다.'))
+        J35A_41d155b1 = self.assets.resource
+        J11B_5e9fb347 = self.assets.project_key()
+        OldKing_1eba5347 = re.sub('[^\\w-]+', '_', path.stem)[:48] or 'image'
+        J10C_840e661a = f'{purpose}_{OldKing_1eba5347}_{uuid.uuid4().hex[:12]}'
+        H6K_2a593c3c = J35A_41d155b1.import_project_resource(str(path), J35A_41d155b1.Usage.TEXTURE, name=J10C_840e661a, group='GrAnit lilToon ' + purpose)
+        J11B_fb86e9cb = H6K_2a593c3c.identifier()
+        if J11B_fb86e9cb.context != J11B_5e9fb347 or self.assets.project_key() != J11B_5e9fb347:
+            raise RuntimeError(tr('프로젝트가 바뀌어 가져온 이미지를 연결하지 않았습니다.'))
+        MayGreenfield_2b049b7e = J11B_fb86e9cb.url()
+        self.validate_project_image(MayGreenfield_2b049b7e)
+        return MayGreenfield_2b049b7e
 
     def load_metadata(self):
-        J10C_4be97d46 = self.assets.project.Metadata(METADATA_CONTEXT)
-        if 'state' not in J10C_4be97d46.list():
+        J16_efb5a04a = self.assets.project.Metadata(METADATA_CONTEXT)
+        if 'state' not in J16_efb5a04a.list():
             return None
-        J16_0e3b35df = J10C_4be97d46.get('state')
-        Thermidor_32daa4e7 = json.loads(J16_0e3b35df) if isinstance(J16_0e3b35df, str) else J16_0e3b35df
-        ZTQ15_8ea8cdb7 = Thermidor_32daa4e7.get('resource_context', '') if isinstance(Thermidor_32daa4e7, dict) else ''
-        J11B_f8609511 = self.assets.project_key()
-        if ZTQ15_8ea8cdb7 and ZTQ15_8ea8cdb7 != J11B_f8609511:
-            Thermidor_32daa4e7 = rebase_project_urls(Thermidor_32daa4e7, ZTQ15_8ea8cdb7, J11B_f8609511)
-            Thermidor_32daa4e7['resource_context'] = J11B_f8609511
-        return Thermidor_32daa4e7
+        J16D_3813e8fe = J16_efb5a04a.get('state')
+        Feedback_8fa70997 = json.loads(J16D_3813e8fe) if isinstance(J16D_3813e8fe, str) else J16D_3813e8fe
+        ZTZ96B_1ff4c751 = Feedback_8fa70997.get('resource_context', '') if isinstance(Feedback_8fa70997, dict) else ''
+        H6K_1e403201 = self.assets.project_key()
+        if ZTZ96B_1ff4c751 and ZTZ96B_1ff4c751 != H6K_1e403201:
+            Feedback_8fa70997 = rebase_project_urls(Feedback_8fa70997, ZTZ96B_1ff4c751, H6K_1e403201)
+            Feedback_8fa70997['resource_context'] = H6K_1e403201
+        return Feedback_8fa70997
 
     def save_metadata(self, data):
         self.assets.ensure_ready()
         data = deepcopy(data)
         data['resource_context'] = self.assets.project_key()
-        WynneDFanchon_51b6242c = json.dumps(data, ensure_ascii=False, allow_nan=False)
-        self.assets.project.Metadata(METADATA_CONTEXT).set('state', WynneDFanchon_51b6242c)
+        Roadie_9efbb9f0 = json.dumps(data, ensure_ascii=False, allow_nan=False)
+        self.assets.project.Metadata(METADATA_CONTEXT).set('state', Roadie_9efbb9f0)
 
     def ensure_resource(self, shader, preferred_url=''):
         self.assets.ensure_ready()
-        ZTZ99A_e2376eeb = self.assets.resource
+        ZTZ96A_26ef5c59 = self.assets.resource
         if preferred_url:
-            Y20_7e3caac6 = ZTZ99A_e2376eeb.ResourceID.from_url(preferred_url)
-            J16_8c489e13 = ZTZ99A_e2376eeb.Resource.retrieve(Y20_7e3caac6)
-            if J16_8c489e13:
-                if len(J16_8c489e13) != 1 or J16_8c489e13[0].type() != ZTZ99A_e2376eeb.Type.SHADER:
-                    raise RuntimeError('저장된 GrAnit 리소스가 셰이더가 아닙니다.')
-                return (J16_8c489e13[0].identifier().url(), Y20_7e3caac6.name)
-        Feedback_160672bc = shader_path(shader)
-        J15_3eb3f8e2 = hashlib.sha256(Feedback_160672bc.read_bytes()).hexdigest()[:16]
-        J15_df13bfbe = f'Granit_LilToon_{J15_3eb3f8e2}'
-        J16_8c489e13 = ZTZ99A_e2376eeb.Resource.retrieve(ZTZ99A_e2376eeb.ResourceID.from_project(J15_df13bfbe))
-        if J16_8c489e13:
-            if len(J16_8c489e13) != 1 or J16_8c489e13[0].type() != ZTZ99A_e2376eeb.Type.SHADER:
-                raise RuntimeError('GrAnit 셰이더 리소스 이름이 다른 리소스와 충돌합니다.')
-            return (J16_8c489e13[0].identifier().url(), J15_df13bfbe)
-        Y20_b061e582 = ZTZ99A_e2376eeb.import_project_resource(str(Feedback_160672bc), ZTZ99A_e2376eeb.Usage.SHADER, name=J15_df13bfbe, group='GrAnit lilToon')
-        Y20_7e3caac6 = Y20_b061e582.identifier()
-        if Y20_7e3caac6.context != self.assets.project_key() or Y20_7e3caac6.name != J15_df13bfbe:
-            raise RuntimeError('Painter가 요청한 프로젝트/이름과 다른 셰이더 리소스를 반환했습니다.')
-        log('셰이더 리소스 임포트 완료', url=Y20_7e3caac6.url())
-        return (Y20_7e3caac6.url(), J15_df13bfbe)
+            J20_d293052d = ZTZ96A_26ef5c59.ResourceID.from_url(preferred_url)
+            J16D_5f014470 = ZTZ96A_26ef5c59.Resource.retrieve(J20_d293052d)
+            if J16D_5f014470:
+                if len(J16D_5f014470) != 1 or J16D_5f014470[0].type() != ZTZ96A_26ef5c59.Type.SHADER:
+                    raise RuntimeError(tr('저장된 GrAnit 리소스가 셰이더가 아닙니다.'))
+                return (J16D_5f014470[0].identifier().url(), J20_d293052d.name)
+        Ambient_80cb8a6c = shader_path(shader)
+        J16D_e81c684d = hashlib.sha256(Ambient_80cb8a6c.read_bytes()).hexdigest()[:16]
+        J35A_3a839e19 = f'Granit_LilToon_{J16D_e81c684d}'
+        J16D_5f014470 = ZTZ96A_26ef5c59.Resource.retrieve(ZTZ96A_26ef5c59.ResourceID.from_project(J35A_3a839e19))
+        if J16D_5f014470:
+            if len(J16D_5f014470) != 1 or J16D_5f014470[0].type() != ZTZ96A_26ef5c59.Type.SHADER:
+                raise RuntimeError(tr('GrAnit 셰이더 리소스 이름이 다른 리소스와 충돌합니다.'))
+            return (J16D_5f014470[0].identifier().url(), J35A_3a839e19)
+        ZTZ99A_1eb6618e = ZTZ96A_26ef5c59.import_project_resource(str(Ambient_80cb8a6c), ZTZ96A_26ef5c59.Usage.SHADER, name=J35A_3a839e19, group='GrAnit lilToon')
+        J20_d293052d = ZTZ99A_1eb6618e.identifier()
+        if J20_d293052d.context != self.assets.project_key() or J20_d293052d.name != J35A_3a839e19:
+            raise RuntimeError(tr('Painter가 요청한 프로젝트/이름과 다른 셰이더 리소스를 반환했습니다.'))
+        log(tr('셰이더 리소스 임포트 완료'), url=J20_d293052d.url())
+        return (J20_d293052d.url(), J35A_3a839e19)
 
     def _write_snapshot(self, before, after, texture_set=None, target_label=None):
         validate_snapshot(after)
         try:
             self._call('alg.shaders.shaderInstancesFromObject', after)
-            J11B_939d95af = self.snapshot()
-            for Mihaly_8a2cc0ee in after['shaders'].keys() - before['shaders'].keys():
-                if self.find_native(Mihaly_8a2cc0ee) is None:
-                    raise RuntimeError('Painter가 새 셰이더 인스턴스를 만들지 않았습니다.')
-            for name, Shamrock_cadab7cb in before['texturesets'].items():
-                ClosedPlan_5b3f947c = target_label if name == texture_set else Shamrock_cadab7cb['shader']
-                if J11B_939d95af['texturesets'].get(name, {}).get('shader') != ClosedPlan_5b3f947c:
-                    raise RuntimeError(f'Painter 텍스처셋 적용 확인 실패: {name}')
-            for name, Shamrock_cadab7cb in before['shaders'].items():
-                J20_f857407a = any((t['shader'] == name for t in after['texturesets'].values()))
-                if J20_f857407a and after['shaders'].get(name) == Shamrock_cadab7cb and (J11B_939d95af['shaders'].get(name) != Shamrock_cadab7cb):
-                    raise RuntimeError(f'대상 외 셰이더 설정 보존 확인 실패: {name}')
-            return J11B_939d95af
-        except Exception as ArisawaHeavyIndustries_8c1cffea:
-            log('셰이더 매핑 적용 실패', error=str(ArisawaHeavyIndustries_8c1cffea), requested=list(after['shaders']))
+            J15_86935e0f = self.snapshot()
+            for Talisman_b2ca91ac in after['shaders'].keys() - before['shaders'].keys():
+                if self.find_native(Talisman_b2ca91ac) is None:
+                    raise RuntimeError(tr('Painter가 새 셰이더 인스턴스를 만들지 않았습니다.'))
+            for name, Trigger_e35d9e35 in before['texturesets'].items():
+                GreatWall_b326427d = target_label if name == texture_set else Trigger_e35d9e35['shader']
+                if J15_86935e0f['texturesets'].get(name, {}).get('shader') != GreatWall_b326427d:
+                    raise RuntimeError(tr('Painter 텍스처셋 적용 확인 실패: {v0}', v0=name))
+            for name, Trigger_e35d9e35 in before['shaders'].items():
+                H6K_c09dc00f = any((t['shader'] == name for t in after['texturesets'].values()))
+                if H6K_c09dc00f and after['shaders'].get(name) == Trigger_e35d9e35 and (J15_86935e0f['shaders'].get(name) != Trigger_e35d9e35):
+                    raise RuntimeError(tr('대상 외 셰이더 설정 보존 확인 실패: {v0}', v0=name))
+            return J15_86935e0f
+        except Exception as OmerScience_2445d0fc:
+            log(tr('셰이더 매핑 적용 실패'), error=str(OmerScience_2445d0fc), requested=list(after['shaders']))
             try:
                 self._call('alg.shaders.shaderInstancesFromObject', before)
-            except Exception as Algebra_60edd66a:
-                raise RuntimeError(f'{ArisawaHeavyIndustries_8c1cffea}; 이전 연결 복구도 실패했습니다: {Algebra_60edd66a}') from ArisawaHeavyIndustries_8c1cffea
+            except Exception as ClosedPlan_005a0ca7:
+                raise RuntimeError(tr('{v0}; 이전 연결 복구도 실패했습니다: {v1}', v0=OmerScience_2445d0fc, v1=ClosedPlan_005a0ca7)) from OmerScience_2445d0fc
             raise
 
     def apply_instance(self, texture_set, label, shader, resource_url, values):
-        Rosenthal_40ab2fb9 = self.snapshot()
-        if texture_set not in Rosenthal_40ab2fb9['texturesets']:
-            raise RuntimeError('텍스처셋이 더 이상 존재하지 않습니다.')
-        ZTZ99_854ffbb3 = self.find_native(label)
-        if ZTZ99_854ffbb3 is not None and ZTZ99_854ffbb3['url'] != resource_url:
-            raise RuntimeError('Painter의 셰이더 연결이 변경되어 적용하지 않았습니다.')
-        Stasis_b5779eea, J20_fc0c9131 = self.ensure_resource(shader, resource_url)
-        ArteriaCranium_05944350 = deepcopy(Rosenthal_40ab2fb9)
-        J10C_a7db13f4 = ArteriaCranium_05944350['shaders'].setdefault(label, {'shader': J20_fc0c9131, 'shaderInstance': label, 'parameters': {}, 'materials': {}})
-        for YellowThirteen_e40287be, Swordsman_a8e9142e in values.items():
-            J10C_35a2b7dc = shader.parameters.get(YellowThirteen_e40287be)
-            if J10C_35a2b7dc is None:
+        Stigro_9d1fe989 = self.snapshot()
+        if texture_set not in Stigro_9d1fe989['texturesets']:
+            raise RuntimeError(tr('텍스처셋이 더 이상 존재하지 않습니다.'))
+        J16_739c83a5 = self.find_native(label)
+        if J16_739c83a5 is not None and J16_739c83a5['url'] != resource_url:
+            raise RuntimeError(tr('Painter의 셰이더 연결이 변경되어 적용하지 않았습니다.'))
+        Shinkai_e2ccba2c, J20_23e19fe9 = self.ensure_resource(shader, resource_url)
+        GigaBase_130bda7d = deepcopy(Stigro_9d1fe989)
+        ZTZ96A_0111d98c = GigaBase_130bda7d['shaders'].setdefault(label, {'shader': J20_23e19fe9, 'shaderInstance': label, 'parameters': {}, 'materials': {}})
+        for PJ_239da043, Talisman_e24d8bf5 in values.items():
+            ZTZ96B_391cce78 = shader.parameters.get(PJ_239da043)
+            if ZTZ96B_391cce78 is None:
                 continue
-            if J10C_35a2b7dc.data_type == 'ByteArray' and (not Swordsman_a8e9142e):
+            if ZTZ96B_391cce78.data_type == 'ByteArray' and (not Talisman_e24d8bf5):
                 continue
-            Y20_7c448f61 = 'materials' if J10C_35a2b7dc.data_type == 'ByteArray' else 'parameters'
-            J10C_a7db13f4.setdefault(Y20_7c448f61, {}).setdefault(J10C_35a2b7dc.group, {})[YellowThirteen_e40287be] = deepcopy(Swordsman_a8e9142e)
-        ArteriaCranium_05944350['texturesets'][texture_set]['shader'] = label
-        self._write_snapshot(Rosenthal_40ab2fb9, ArteriaCranium_05944350, texture_set, label)
+            J35A_2dd08d9f = 'materials' if ZTZ96B_391cce78.data_type == 'ByteArray' else 'parameters'
+            ZTZ96A_0111d98c.setdefault(J35A_2dd08d9f, {}).setdefault(ZTZ96B_391cce78.group, {})[PJ_239da043] = deepcopy(Talisman_e24d8bf5)
+        GigaBase_130bda7d['texturesets'][texture_set]['shader'] = label
+        self._write_snapshot(Stigro_9d1fe989, GigaBase_130bda7d, texture_set, label)
         try:
-            ZTZ99_854ffbb3 = self.find_native(label)
-            if ZTZ99_854ffbb3 is None:
-                raise RuntimeError('텍스처셋에 연결할 Painter 인스턴스를 만들지 못했습니다.')
-            if ZTZ99_854ffbb3['url'] != Stasis_b5779eea:
-                self._call('alg.shaders.updateShaderInstance', ZTZ99_854ffbb3['id'], Stasis_b5779eea)
-            self.set_parameters(label, Stasis_b5779eea, values)
-            log('셰이더 인스턴스 적용 완료', texture_set=texture_set, label=label, url=Stasis_b5779eea)
-            return Stasis_b5779eea
-        except Exception as ArisawaHeavyIndustries_f603eb50:
-            self._rollback(Rosenthal_40ab2fb9, ArisawaHeavyIndustries_f603eb50)
+            J16_739c83a5 = self.find_native(label)
+            if J16_739c83a5 is None:
+                raise RuntimeError(tr('텍스처셋에 연결할 Painter 인스턴스를 만들지 못했습니다.'))
+            if J16_739c83a5['url'] != Shinkai_e2ccba2c:
+                self._call('alg.shaders.updateShaderInstance', J16_739c83a5['id'], Shinkai_e2ccba2c)
+            self.set_parameters(label, Shinkai_e2ccba2c, values)
+            log(tr('셰이더 인스턴스 적용 완료'), texture_set=texture_set, label=label, url=Shinkai_e2ccba2c)
+            return Shinkai_e2ccba2c
+        except Exception as SolDios_82e44b0c:
+            self._rollback(Stigro_9d1fe989, SolDios_82e44b0c)
 
     def _rollback(self, before, error):
         try:
             self._call('alg.shaders.shaderInstancesFromObject', before)
-        except Exception as GlobalArmaments_6bbf79f8:
-            raise RuntimeError(f'{error}; 이전 연결 복구도 실패했습니다: {GlobalArmaments_6bbf79f8}') from error
+        except Exception as Torus_e9a3b438:
+            raise RuntimeError(tr('{v0}; 이전 연결 복구도 실패했습니다: {v1}', v0=error, v1=Torus_e9a3b438)) from error
         raise error
 
     def assign(self, texture_set, label):
-        Cabracan_e412202c = self.snapshot()
-        if texture_set not in Cabracan_e412202c['texturesets'] or label not in Cabracan_e412202c['shaders']:
-            raise RuntimeError('텍스처셋 또는 셰이더가 더 이상 존재하지 않습니다.')
-        Collared_49be0e88 = deepcopy(Cabracan_e412202c)
-        Collared_49be0e88['texturesets'][texture_set]['shader'] = label
-        self._write_snapshot(Cabracan_e412202c, Collared_49be0e88, texture_set, label)
+        ArteriaCranium_83e88aed = self.snapshot()
+        if texture_set not in ArteriaCranium_83e88aed['texturesets'] or label not in ArteriaCranium_83e88aed['shaders']:
+            raise RuntimeError(tr('텍스처셋 또는 셰이더가 더 이상 존재하지 않습니다.'))
+        Algebra_b478e26c = deepcopy(ArteriaCranium_83e88aed)
+        Algebra_b478e26c['texturesets'][texture_set]['shader'] = label
+        self._write_snapshot(ArteriaCranium_83e88aed, Algebra_b478e26c, texture_set, label)
 
     def capture(self, texture_set):
-        Algebra_47230d3f = self.snapshot()
-        J10C_cff73c91 = Algebra_47230d3f['texturesets'][texture_set]['shader']
-        J16D_f16cb40d = self.find_native(J10C_cff73c91)
-        if J16D_f16cb40d is None:
-            raise RuntimeError('적용 전 셰이더를 찾을 수 없습니다.')
-        parameters = self.parameters(J16D_f16cb40d['id'])
-        return {'label': J10C_cff73c91, 'entry': deepcopy(Algebra_47230d3f['shaders'][J10C_cff73c91]), 'url': J16D_f16cb40d['url'], 'values': {k: deepcopy(p['value']) for k, p in parameters.items()}}
+        SpiritOfMotherwill_b9958667 = self.snapshot()
+        J15_d8fae286 = SpiritOfMotherwill_b9958667['texturesets'][texture_set]['shader']
+        Y20_3795438c = self.find_native(J15_d8fae286)
+        if Y20_3795438c is None:
+            raise RuntimeError(tr('적용 전 셰이더를 찾을 수 없습니다.'))
+        parameters = self.parameters(Y20_3795438c['id'])
+        return {'label': J15_d8fae286, 'entry': deepcopy(SpiritOfMotherwill_b9958667['shaders'][J15_d8fae286]), 'url': Y20_3795438c['url'], 'values': {k: deepcopy(p['value']) for k, p in parameters.items()}}
 
     def restore(self, texture_set, previous):
-        BFF_d86f13f3 = self.snapshot()
-        Torus_01318291 = previous['label']
-        J11B_eaf5c5ec = self.find_native(Torus_01318291)
-        Algebra_b9477ce6 = J11B_eaf5c5ec is not None and J11B_eaf5c5ec['url'] == previous['url'] and (BFF_d86f13f3['shaders'].get(Torus_01318291) == previous['entry'])
-        if Algebra_b9477ce6:
-            self.assign(texture_set, Torus_01318291)
+        GigaBase_d8183dea = self.snapshot()
+        Stigro_382fba3a = previous['label']
+        J20_42e35d05 = self.find_native(Stigro_382fba3a)
+        ArteriaCarpals_b6615dd8 = J20_42e35d05 is not None and J20_42e35d05['url'] == previous['url'] and (GigaBase_d8183dea['shaders'].get(Stigro_382fba3a) == previous['entry'])
+        if ArteriaCarpals_b6615dd8:
+            self.assign(texture_set, Stigro_382fba3a)
             return
-        if J11B_eaf5c5ec is not None:
-            Torus_01318291 = 'Granit Restore ' + uuid.uuid4().hex
-        GreatWall_6655a7ba = deepcopy(BFF_d86f13f3)
-        Stigro_d4eb11ec = deepcopy(previous['entry'])
-        Stigro_d4eb11ec['shaderInstance'] = Torus_01318291
-        GreatWall_6655a7ba['shaders'][Torus_01318291] = Stigro_d4eb11ec
-        GreatWall_6655a7ba['texturesets'][texture_set]['shader'] = Torus_01318291
-        self._write_snapshot(BFF_d86f13f3, GreatWall_6655a7ba, texture_set, Torus_01318291)
+        if J20_42e35d05 is not None:
+            Stigro_382fba3a = 'Granit Restore ' + uuid.uuid4().hex
+        Stigro_845e76b5 = deepcopy(GigaBase_d8183dea)
+        Eclipse_426df38f = deepcopy(previous['entry'])
+        Eclipse_426df38f['shaderInstance'] = Stigro_382fba3a
+        Stigro_845e76b5['shaders'][Stigro_382fba3a] = Eclipse_426df38f
+        Stigro_845e76b5['texturesets'][texture_set]['shader'] = Stigro_382fba3a
+        self._write_snapshot(GigaBase_d8183dea, Stigro_845e76b5, texture_set, Stigro_382fba3a)
         try:
-            J11B_eaf5c5ec = self.find_native(Torus_01318291)
-            if J11B_eaf5c5ec is None:
-                raise RuntimeError('복원용 Painter 인스턴스를 만들지 못했습니다.')
-            self._call('alg.shaders.updateShaderInstance', J11B_eaf5c5ec['id'], previous['url'])
-            self.set_parameters(Torus_01318291, previous['url'], previous['values'])
-            Rosenthal_85ef6a2b = self.snapshot()
-            ArisawaHeavyIndustries_ca675585 = deepcopy(Rosenthal_85ef6a2b)
-            ArisawaHeavyIndustries_ca675585['shaders'][Torus_01318291] = Stigro_d4eb11ec
-            self._write_snapshot(Rosenthal_85ef6a2b, ArisawaHeavyIndustries_ca675585, texture_set, Torus_01318291)
-        except Exception as InteriorUnion_b01e4df6:
-            self._rollback(BFF_d86f13f3, InteriorUnion_b01e4df6)
+            J20_42e35d05 = self.find_native(Stigro_382fba3a)
+            if J20_42e35d05 is None:
+                raise RuntimeError(tr('복원용 Painter 인스턴스를 만들지 못했습니다.'))
+            self._call('alg.shaders.updateShaderInstance', J20_42e35d05['id'], previous['url'])
+            self.set_parameters(Stigro_382fba3a, previous['url'], previous['values'])
+            BigBox_6472038e = self.snapshot()
+            OmerScience_39936153 = deepcopy(BigBox_6472038e)
+            OmerScience_39936153['shaders'][Stigro_382fba3a] = Eclipse_426df38f
+            self._write_snapshot(BigBox_6472038e, OmerScience_39936153, texture_set, Stigro_382fba3a)
+        except Exception as Answerer_a1dbe2e8:
+            self._rollback(GigaBase_d8183dea, Answerer_a1dbe2e8)

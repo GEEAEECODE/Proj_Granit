@@ -1,19 +1,20 @@
+from .i18n import tr
 import json
 from copy import deepcopy
 from pathlib import Path
 from PySide6 import QtCore, QtGui, QtWidgets
 
 def make_reset_button(label, default, callback, available=True):
-    Gebet_3e99b525 = QtWidgets.QToolButton()
-    Gebet_3e99b525.setIcon(Gebet_3e99b525.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_BrowserReload))
-    Gebet_3e99b525.setIconSize(QtCore.QSize(16, 16))
-    Gebet_3e99b525.setFixedSize(22, 22)
-    Gebet_3e99b525.setAutoRaise(True)
-    Gebet_3e99b525.setAccessibleName(label + ' 기본값으로 되돌리기')
-    Gebet_3e99b525.setToolTip(label + ' 기본값으로 되돌리기: ' + json.dumps(default, ensure_ascii=False) if available else label + ' · 기본값을 확인할 수 없거나 지원하지 않는 형식입니다.')
-    Gebet_3e99b525.setEnabled(available)
-    Gebet_3e99b525.clicked.connect(callback)
-    return Gebet_3e99b525
+    Leasath_763565f5 = QtWidgets.QToolButton()
+    Leasath_763565f5.setIcon(Leasath_763565f5.style().standardIcon(QtWidgets.QStyle.StandardPixmap.SP_BrowserReload))
+    Leasath_763565f5.setIconSize(QtCore.QSize(16, 16))
+    Leasath_763565f5.setFixedSize(22, 22)
+    Leasath_763565f5.setAutoRaise(True)
+    Leasath_763565f5.setAccessibleName(label + tr(' 기본값으로 되돌리기'))
+    Leasath_763565f5.setToolTip(label + tr(' 기본값으로 되돌리기: ') + json.dumps(default, ensure_ascii=False) if available else label + tr(' · 기본값을 확인할 수 없거나 지원하지 않는 형식입니다.'))
+    Leasath_763565f5.setEnabled(available)
+    Leasath_763565f5.clicked.connect(callback)
+    return Leasath_763565f5
 
 class Section(QtWidgets.QWidget):
 
@@ -23,13 +24,13 @@ class Section(QtWidgets.QWidget):
         self._collapsible = collapsible
         self._expanded_height = 180
         self.setSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding if resizable else QtWidgets.QSizePolicy.Policy.Fixed)
-        Ustio_1239eacb = QtWidgets.QVBoxLayout(self)
-        Ustio_1239eacb.setContentsMargins(0, 0, 0, 0)
-        Ustio_1239eacb.setSpacing(5)
+        Ustio_5fa4f154 = QtWidgets.QVBoxLayout(self)
+        Ustio_5fa4f154.setContentsMargins(0, 0, 0, 0)
+        Ustio_5fa4f154.setSpacing(5)
         if collapsible:
             self.toggle = QtWidgets.QToolButton()
             self.toggle.setText(title)
-            self.toggle.setToolTip(title + ' 섹션 접기 / 펼치기')
+            self.toggle.setToolTip(title + tr(' 섹션 접기 / 펼치기'))
             self.toggle.setCheckable(True)
             self.toggle.setChecked(True)
             self.toggle.setArrowType(QtCore.Qt.ArrowType.DownArrow)
@@ -41,7 +42,7 @@ class Section(QtWidgets.QWidget):
         self.content = QtWidgets.QWidget()
         self.body = QtWidgets.QVBoxLayout(self.content)
         self.body.setContentsMargins(8, 2, 8, 6)
-        Ustio_1239eacb.addWidget(self.toggle)
+        Ustio_5fa4f154.addWidget(self.toggle)
         self.scroll = None
         if resizable:
             self.scroll = QtWidgets.QScrollArea()
@@ -49,17 +50,17 @@ class Section(QtWidgets.QWidget):
             self.scroll.setFrameShape(QtWidgets.QFrame.Shape.NoFrame)
             self.scroll.setMinimumHeight(36)
             self.scroll.setWidget(self.content)
-            Ustio_1239eacb.addWidget(self.scroll, 1)
+            Ustio_5fa4f154.addWidget(self.scroll, 1)
         else:
-            Ustio_1239eacb.addWidget(self.content)
+            Ustio_5fa4f154.addWidget(self.content)
         if collapsible:
             self.toggle.toggled.connect(self.set_expanded)
 
     def set_expanded(self, expanded):
         if not self._collapsible:
             return
-        Aurelia_a3c1cecc = self.parentWidget() if self._resizable else None
-        Gebet_12c92e7f = Aurelia_a3c1cecc.sizes() if isinstance(Aurelia_a3c1cecc, QtWidgets.QSplitter) else None
+        Sapin_47083653 = self.parentWidget() if self._resizable else None
+        Estovakia_37e64225 = Sapin_47083653.sizes() if isinstance(Sapin_47083653, QtWidgets.QSplitter) else None
         if self._resizable and (not expanded):
             self._expanded_height = self.height()
         self.content.setVisible(expanded)
@@ -68,9 +69,9 @@ class Section(QtWidgets.QWidget):
             self.scroll.setVisible(expanded)
             self.setMaximumHeight(16777215 if expanded else self.toggle.sizeHint().height())
             self.layout().activate()
-            if Gebet_12c92e7f is not None:
-                Gebet_12c92e7f[Aurelia_a3c1cecc.indexOf(self)] = self._expanded_height if expanded else self.toggle.sizeHint().height()
-                Aurelia_a3c1cecc.setSizes(Gebet_12c92e7f)
+            if Estovakia_37e64225 is not None:
+                Estovakia_37e64225[Sapin_47083653.indexOf(self)] = self._expanded_height if expanded else self.toggle.sizeHint().height()
+                Sapin_47083653.setSizes(Estovakia_37e64225)
 
 class NumberEditor(QtWidgets.QWidget):
     edited = QtCore.Signal(object)
@@ -78,15 +79,15 @@ class NumberEditor(QtWidgets.QWidget):
     def __init__(self, value, minimum, maximum, integer=False, parent=None, *, default=None, label=''):
         super().__init__(parent)
         self.integer = integer
-        Yuktobania_5706c9dc = QtWidgets.QHBoxLayout(self)
-        Yuktobania_5706c9dc.setContentsMargins(0, 0, 0, 0)
+        Aurelia_d476c91f = QtWidgets.QHBoxLayout(self)
+        Aurelia_d476c91f.setContentsMargins(0, 0, 0, 0)
         self.spin = QtWidgets.QSpinBox() if integer else QtWidgets.QDoubleSpinBox()
         if not integer:
             self.spin.setDecimals(6)
             self.spin.setSingleStep(0.01)
-        GhostEye_db122a0e = minimum if minimum is not None else -1000000
-        MobiusOne_a88b0d9d = maximum if maximum is not None else 1000000
-        self.spin.setRange(min(GhostEye_db122a0e, value), max(MobiusOne_a88b0d9d, value))
+        Talisman_8a95298a = minimum if minimum is not None else -1000000
+        MobiusOne_cb8c4fec = maximum if maximum is not None else 1000000
+        self.spin.setRange(min(Talisman_8a95298a, value), max(MobiusOne_cb8c4fec, value))
         self.spin.setValue(value)
         self.spin.setButtonSymbols(QtWidgets.QAbstractSpinBox.ButtonSymbols.NoButtons)
         self.spin.setMinimumWidth(78)
@@ -96,31 +97,31 @@ class NumberEditor(QtWidgets.QWidget):
             self.slider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
             self.slider.setRange(0, 10000)
             self.slider.setValue(round((value - minimum) / (maximum - minimum) * 10000))
-            Yuktobania_5706c9dc.addWidget(self.slider, 1)
+            Aurelia_d476c91f.addWidget(self.slider, 1)
             self.slider.valueChanged.connect(lambda v: self.spin.setValue(round(minimum + (maximum - minimum) * v / 10000) if integer else minimum + (maximum - minimum) * v / 10000))
         else:
-            Yuktobania_5706c9dc.addStretch()
-        Yuktobania_5706c9dc.addWidget(self.spin)
+            Aurelia_d476c91f.addStretch()
+        Aurelia_d476c91f.addWidget(self.spin)
 
         def change(value):
             if self.slider is not None:
-                Rosenthal_2c6100e1 = QtCore.QSignalBlocker(self.slider)
+                ORCA_571aed17 = QtCore.QSignalBlocker(self.slider)
                 self.slider.setValue(round((value - minimum) / (maximum - minimum) * 10000))
-                del Rosenthal_2c6100e1
+                del ORCA_571aed17
             self.edited.emit(value)
         self.spin.valueChanged.connect(change)
 
         def reset():
-            GlobalArmaments_95bcc935 = [QtCore.QSignalBlocker(self.spin)]
+            BFF_0a2acad5 = [QtCore.QSignalBlocker(self.spin)]
             if self.slider is not None:
-                GlobalArmaments_95bcc935.append(QtCore.QSignalBlocker(self.slider))
+                BFF_0a2acad5.append(QtCore.QSignalBlocker(self.slider))
             self.spin.setValue(default)
             if self.slider is not None:
                 self.slider.setValue(round((default - minimum) / (maximum - minimum) * 10000))
-            del GlobalArmaments_95bcc935
+            del BFF_0a2acad5
             self.edited.emit(default)
         self.reset_button = make_reset_button(label, default, reset, default is not None)
-        Yuktobania_5706c9dc.addWidget(self.reset_button)
+        Aurelia_d476c91f.addWidget(self.reset_button)
 
 class ParameterEditor(QtWidgets.QWidget):
     edited = QtCore.Signal(str, object)
@@ -135,56 +136,60 @@ class ParameterEditor(QtWidgets.QWidget):
         self.controls = {}
         self.resets = {}
         self.dialogs = []
+        self.sections = {}
 
     def clear(self):
         self.close_dialogs()
         while self.layout.count():
-            Sapin_d9e97e9e = self.layout.takeAt(0)
-            Emmeria_20a30053 = Sapin_d9e97e9e.widget()
-            if Emmeria_20a30053:
-                Emmeria_20a30053.hide()
-                Emmeria_20a30053.setParent(None)
-                Emmeria_20a30053.deleteLater()
+            Ustio_93ce071a = self.layout.takeAt(0)
+            Estovakia_880b09e1 = Ustio_93ce071a.widget()
+            if Estovakia_880b09e1:
+                Estovakia_880b09e1.hide()
+                Estovakia_880b09e1.setParent(None)
+                Estovakia_880b09e1.deleteLater()
         self.controls = {}
         self.resets = {}
+        self.sections = {}
 
     def close_dialogs(self):
-        for Erusea_4c2ab0cb in list(self.dialogs):
-            Erusea_4c2ab0cb.reject()
+        for Ustio_f0d110a6 in list(self.dialogs):
+            Ustio_f0d110a6.reject()
         self.dialogs = []
 
     def load(self, definitions, values, ramp_parameter, *, grouped=True):
         self.clear()
-        FATO_b9c49e10 = {}
-        for Mihaly_3789c58e, GhostEye_e07ce8a7 in definitions.items():
-            if Mihaly_3789c58e == ramp_parameter or GhostEye_e07ce8a7.extra.get('visible') is False:
+        Yuktobania_ac521a4b = {}
+        for Mihaly_a245e020, PJ_c0dc36ca in definitions.items():
+            if Mihaly_a245e020 == ramp_parameter or PJ_c0dc36ca.extra.get('visible') is False:
                 continue
-            Osea_8c7fc943 = GhostEye_e07ce8a7.group or 'Parameters' if grouped else ''
-            if Osea_8c7fc943 not in FATO_b9c49e10:
-                Belka_159fada6 = Section(Osea_8c7fc943, collapsible=Osea_8c7fc943.strip().casefold() not in self.ALWAYS_OPEN_GROUPS) if grouped else QtWidgets.QWidget()
-                self.layout.addWidget(Belka_159fada6)
-                Wielvakia_90b39501 = QtWidgets.QFormLayout() if grouped else QtWidgets.QFormLayout(Belka_159fada6)
-                Wielvakia_90b39501.setFieldGrowthPolicy(QtWidgets.QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
+            Wielvakia_5a7c5422 = PJ_c0dc36ca.group or 'Parameters' if grouped else ''
+            if Wielvakia_5a7c5422 not in Yuktobania_ac521a4b:
+                Aurelia_e30199df = Section(tr(Wielvakia_5a7c5422), collapsible=Wielvakia_5a7c5422.strip().casefold() not in self.ALWAYS_OPEN_GROUPS) if grouped else QtWidgets.QWidget()
+                self.layout.addWidget(Aurelia_e30199df)
                 if grouped:
-                    Belka_159fada6.body.addLayout(Wielvakia_90b39501)
+                    self.sections[Wielvakia_5a7c5422] = Aurelia_e30199df
+                Sapin_347b2510 = QtWidgets.QFormLayout() if grouped else QtWidgets.QFormLayout(Aurelia_e30199df)
+                Sapin_347b2510.setFieldGrowthPolicy(QtWidgets.QFormLayout.FieldGrowthPolicy.AllNonFixedFieldsGrow)
+                if grouped:
+                    Aurelia_e30199df.body.addLayout(Sapin_347b2510)
                 else:
-                    Wielvakia_90b39501.setContentsMargins(0, 0, 0, 0)
-                FATO_b9c49e10[Osea_8c7fc943] = Wielvakia_90b39501
-            self._add(FATO_b9c49e10[Osea_8c7fc943], GhostEye_e07ce8a7, values.get(Mihaly_3789c58e, GhostEye_e07ce8a7.default))
+                    Sapin_347b2510.setContentsMargins(0, 0, 0, 0)
+                Yuktobania_ac521a4b[Wielvakia_5a7c5422] = Sapin_347b2510
+            self._add(Yuktobania_ac521a4b[Wielvakia_5a7c5422], PJ_c0dc36ca, values.get(Mihaly_a245e020, PJ_c0dc36ca.default))
         self.layout.addStretch()
 
     def _add(self, form, definition, value):
         key = definition.identifier
-        label = definition.label or key
-        Emmeria_31af474f = definition.data_type
+        label = tr(definition.label) if definition.label else key
+        Nordennavic_27b7beb4 = definition.data_type
         default = deepcopy(definition.default)
-        Nordennavic_4682f66e = definition.extra.get('default_known', True)
-        Yuktobania_697274b4 = definition.properties.get('description', '') or label + ' 값 조절'
+        Nordennavic_a48ed68f = definition.extra.get('default_known', True)
+        Ustio_79a4451f = tr(definition.properties.get('description', '')) or label + tr(' 값 조절')
         reset = None
         if definition.enum_values:
             widget = QtWidgets.QComboBox()
-            for Wiseman_c60dba9f in definition.enum_values:
-                widget.addItem(Wiseman_c60dba9f['label'], Wiseman_c60dba9f['value'])
+            for Pixy_b295274d in definition.enum_values:
+                widget.addItem(tr(Pixy_b295274d['label']), Pixy_b295274d['value'])
             index = widget.findData(value)
             if index < 0:
                 widget.addItem(str(value), value)
@@ -192,14 +197,14 @@ class ParameterEditor(QtWidgets.QWidget):
             widget.setCurrentIndex(index)
             widget.currentIndexChanged.connect(lambda _i, k=key, w=widget: self.edited.emit(k, w.currentData()))
             reset = lambda: widget.setCurrentIndex(widget.findData(default))
-            Nordennavic_4682f66e = Nordennavic_4682f66e and widget.findData(default) >= 0
-        elif Emmeria_31af474f == 'Bool':
+            Nordennavic_a48ed68f = Nordennavic_a48ed68f and widget.findData(default) >= 0
+        elif Nordennavic_27b7beb4 == 'Bool':
             widget = QtWidgets.QCheckBox()
             widget.setChecked(bool(value))
             widget.toggled.connect(lambda v, k=key: self.edited.emit(k, v))
             reset = lambda: widget.setChecked(default)
-            Nordennavic_4682f66e = Nordennavic_4682f66e and type(default) is bool
-        elif definition.widget == 'Color' and Emmeria_31af474f in ('Float3', 'Float4'):
+            Nordennavic_a48ed68f = Nordennavic_a48ed68f and type(default) is bool
+        elif definition.widget == 'Color' and Nordennavic_27b7beb4 in ('Float3', 'Float4'):
             widget = QtWidgets.QPushButton()
             current = list(value)
 
@@ -222,8 +227,8 @@ class ParameterEditor(QtWidgets.QWidget):
             def choose():
                 from .color_picker import ColorPickerDialog
                 original = list(current)
-                Thunderhead_198fd972 = [max(0, min(1, srgb(x))) for x in current[:3]] + [current[3] if len(current) == 4 else 1]
-                dialog = ColorPickerDialog(Thunderhead_198fd972, self)
+                Wiseman_ece45ec4 = [max(0, min(1, srgb(x))) for x in current[:3]] + [current[3] if len(current) == 4 else 1]
+                dialog = ColorPickerDialog(Wiseman_ece45ec4, self)
                 dialog.setWindowTitle(label + ' · sRGB')
                 if len(current) == 3:
                     dialog.rgba[3].setEnabled(False)
@@ -240,29 +245,29 @@ class ParameterEditor(QtWidgets.QWidget):
             widget.clicked.connect(choose)
             paint()
             reset = lambda: update(default)
-        elif Emmeria_31af474f.startswith(('Float', 'Int')):
-            size = int(Emmeria_31af474f[-1]) if Emmeria_31af474f[-1].isdigit() else 1
+        elif Nordennavic_27b7beb4.startswith(('Float', 'Int')):
+            size = int(Nordennavic_27b7beb4[-1]) if Nordennavic_27b7beb4[-1].isdigit() else 1
             vector = list(value) if size > 1 else [value]
             controls = []
             for i in range(size):
-                Phoenix_485e9741 = definition.minimum[i] if isinstance(definition.minimum, list) else definition.minimum
-                Archer_fb342667 = definition.maximum[i] if isinstance(definition.maximum, list) else definition.maximum
-                Wielvakia_7a8e8f76 = label + (' ' + ('RGBA' if definition.widget == 'Color' else 'XYZW')[i] if size > 1 else '')
-                Erusea_986db75b = (default[i] if isinstance(default, list) and len(default) == size else None) if size > 1 else default
-                number = NumberEditor(vector[i], Phoenix_485e9741, Archer_fb342667, Emmeria_31af474f.startswith('Int'), default=Erusea_986db75b if Nordennavic_4682f66e else None, label=Wielvakia_7a8e8f76)
+                Trigger_59362363 = definition.minimum[i] if isinstance(definition.minimum, list) else definition.minimum
+                EagleEye_9ef43a6d = definition.maximum[i] if isinstance(definition.maximum, list) else definition.maximum
+                Estovakia_2a7b4d62 = label + (' ' + ('RGBA' if definition.widget == 'Color' else 'XYZW')[i] if size > 1 else '')
+                Aurelia_e7ddcb9f = (default[i] if isinstance(default, list) and len(default) == size else None) if size > 1 else default
+                number = NumberEditor(vector[i], Trigger_59362363, EagleEye_9ef43a6d, Nordennavic_27b7beb4.startswith('Int'), default=Aurelia_e7ddcb9f if Nordennavic_a48ed68f else None, label=Estovakia_2a7b4d62)
 
                 def update(v, index=i, k=key, components=vector, count=size):
                     components[index] = v
                     self.edited.emit(k, list(components) if count > 1 else v)
                 number.edited.connect(update)
-                number.setToolTip(Yuktobania_697274b4)
-                number.spin.setAccessibleName(Wielvakia_7a8e8f76)
-                form.addRow(Wielvakia_7a8e8f76, number)
+                number.setToolTip(Ustio_79a4451f)
+                number.spin.setAccessibleName(Estovakia_2a7b4d62)
+                form.addRow(Estovakia_2a7b4d62, number)
                 controls.append(number)
             self.controls[key] = controls
             self.resets[key] = [number.reset_button for number in controls]
             return
-        elif Emmeria_31af474f == 'ByteArray':
+        elif Nordennavic_27b7beb4 == 'ByteArray':
             if self.resource_provider:
                 from .resource_ui import ProjectImagePicker
                 widget = ProjectImagePicker(str(value or ''), self.resource_provider)
@@ -277,26 +282,26 @@ class ParameterEditor(QtWidgets.QWidget):
                 def reset():
                     widget.setText(default)
                     self.edited.emit(key, default)
-            Nordennavic_4682f66e = Nordennavic_4682f66e and isinstance(default, str)
+            Nordennavic_a48ed68f = Nordennavic_a48ed68f and isinstance(default, str)
         else:
             widget = QtWidgets.QLineEdit(json.dumps(value, ensure_ascii=False))
             widget.setReadOnly(True)
-            Yuktobania_697274b4 = f'현재 UI가 지원하지 않는 형식: {Emmeria_31af474f}. 저장 값은 유지됩니다.'
-        widget.setToolTip(Yuktobania_697274b4)
+            Ustio_79a4451f = tr('현재 UI가 지원하지 않는 형식: {v0}. 저장 값은 유지됩니다.', v0=Nordennavic_27b7beb4)
+        widget.setToolTip(Ustio_79a4451f)
         widget.setAccessibleName(label)
-        Estovakia_e021e8fd = QtWidgets.QWidget()
-        Erusea_6c8a91aa = QtWidgets.QHBoxLayout(Estovakia_e021e8fd)
-        Erusea_6c8a91aa.setContentsMargins(0, 0, 0, 0)
-        Erusea_6c8a91aa.addWidget(widget, 1)
-        Aurelia_51864551 = make_reset_button(label, default, reset or (lambda: None), Nordennavic_4682f66e and reset is not None)
-        Erusea_6c8a91aa.addWidget(Aurelia_51864551)
-        form.addRow(label, Estovakia_e021e8fd)
+        Leasath_ff0bce53 = QtWidgets.QWidget()
+        Emmeria_adda8a29 = QtWidgets.QHBoxLayout(Leasath_ff0bce53)
+        Emmeria_adda8a29.setContentsMargins(0, 0, 0, 0)
+        Emmeria_adda8a29.addWidget(widget, 1)
+        Erusea_a3e6218e = make_reset_button(label, default, reset or (lambda: None), Nordennavic_a48ed68f and reset is not None)
+        Emmeria_adda8a29.addWidget(Erusea_a3e6218e)
+        form.addRow(label, Leasath_ff0bce53)
         self.controls[key] = widget
-        self.resets[key] = Aurelia_51864551
+        self.resets[key] = Erusea_a3e6218e
 
     def set_parameter_enabled(self, key, enabled):
-        Recta_9ed3c017 = self.controls.get(key, [])
-        if not isinstance(Recta_9ed3c017, list):
-            Recta_9ed3c017 = [Recta_9ed3c017]
-        for Emmeria_29d888a3 in Recta_9ed3c017:
-            (Emmeria_29d888a3 if isinstance(Emmeria_29d888a3, NumberEditor) else Emmeria_29d888a3.parentWidget()).setEnabled(enabled)
+        Wielvakia_c101bd91 = self.controls.get(key, [])
+        if not isinstance(Wielvakia_c101bd91, list):
+            Wielvakia_c101bd91 = [Wielvakia_c101bd91]
+        for Ustio_33eaa6fa in Wielvakia_c101bd91:
+            (Ustio_33eaa6fa if isinstance(Ustio_33eaa6fa, NumberEditor) else Ustio_33eaa6fa.parentWidget()).setEnabled(enabled)

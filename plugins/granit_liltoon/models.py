@@ -1,3 +1,4 @@
+from .i18n import tr
 from copy import deepcopy
 from dataclasses import dataclass, field, fields
 import json
@@ -9,18 +10,18 @@ def json_copy(value):
 class Record:
 
     def to_dict(self):
-        J35A_5f8ad34a = deepcopy(self.extra)
-        for SkyEye_25643bb4 in fields(self):
-            if SkyEye_25643bb4.name == 'extra':
+        J16D_f662cbe0 = deepcopy(self.extra)
+        for Mihaly_a0a4d330 in fields(self):
+            if Mihaly_a0a4d330.name == 'extra':
                 continue
-            J16D_8b1be7f4 = getattr(self, SkyEye_25643bb4.name)
-            J35A_5f8ad34a[SkyEye_25643bb4.name] = J16D_8b1be7f4.to_dict() if hasattr(J16D_8b1be7f4, 'to_dict') else deepcopy(J16D_8b1be7f4)
-        return json_copy(J35A_5f8ad34a)
+            ZTZ96A_cf539b0b = getattr(self, Mihaly_a0a4d330.name)
+            J16D_f662cbe0[Mihaly_a0a4d330.name] = ZTZ96A_cf539b0b.to_dict() if hasattr(ZTZ96A_cf539b0b, 'to_dict') else deepcopy(ZTZ96A_cf539b0b)
+        return json_copy(J16D_f662cbe0)
 
     @classmethod
     def from_dict(cls, data):
         if not isinstance(data, dict):
-            raise ValueError('Record must be an object.')
+            raise ValueError(tr('Record must be an object.'))
         names = {f.name for f in fields(cls)} - {'extra'}
         return cls(**{k: deepcopy(v) for k, v in data.items() if k in names}, extra={k: deepcopy(v) for k, v in data.items() if k not in names})
 
@@ -70,8 +71,8 @@ class GranitShader(Record):
     extra: dict = field(default_factory=dict)
 
     def to_dict(self):
-        H6K_8e35707c = dict(deepcopy(self.extra), key=self.key, name=self.name, source_file=self.source_file, parameters={k: v.to_dict() for k, v in self.parameters.items()}, channels=[v.to_dict() for v in self.channels], profile=self.profile.to_dict())
-        return json_copy(H6K_8e35707c)
+        ZTZ96A_8eec1d9c = dict(deepcopy(self.extra), key=self.key, name=self.name, source_file=self.source_file, parameters={k: v.to_dict() for k, v in self.parameters.items()}, channels=[v.to_dict() for v in self.channels], profile=self.profile.to_dict())
+        return json_copy(ZTZ96A_8eec1d9c)
 
     @classmethod
     def from_dict(cls, data):
@@ -88,8 +89,8 @@ class ParameterValues(Record):
     extra: dict = field(default_factory=dict)
 
     def fill_defaults(self, definitions):
-        for Phoenix_9c47b971, PJ_7f12c14b in definitions.items():
-            self.values.setdefault(Phoenix_9c47b971, deepcopy(PJ_7f12c14b.default))
+        for GhostEye_da6bd306, Swordsman_05b36ea8 in definitions.items():
+            self.values.setdefault(GhostEye_da6bd306, deepcopy(Swordsman_05b36ea8.default))
 
 @dataclass
 class ShaderInstance(Record):
@@ -100,9 +101,24 @@ class ShaderInstance(Record):
 
     @classmethod
     def from_dict(cls, data):
-        Y20_2e67f56b = super().from_dict(data)
-        Y20_2e67f56b.parameters = ParameterValues.from_dict(Y20_2e67f56b.parameters)
-        return Y20_2e67f56b
+        ZTQ15_3298db8d = super().from_dict(data)
+        ZTQ15_3298db8d.parameters = ParameterValues.from_dict(ZTQ15_3298db8d.parameters)
+        return ZTQ15_3298db8d
+
+@dataclass
+class MaterialBinding(Record):
+    mode: str = ''
+    key: str = ''
+    path: str = ''
+    unity_root: str = ''
+    extra: dict = field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data):
+        obj = super().from_dict(data)
+        if obj.mode not in ('', 'A', 'B') or any((not isinstance(getattr(obj, name), str) for name in ('key', 'path', 'unity_root'))):
+            raise ValueError(tr('Invalid material binding mode.'))
+        return obj
 
 @dataclass
 class TextureState(Record):
@@ -111,13 +127,18 @@ class TextureState(Record):
     resource_url: str = ''
     source_digest: str = ''
     previous_shader: dict = field(default_factory=dict)
+    binding: MaterialBinding = field(default_factory=MaterialBinding)
     extra: dict = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, data):
-        ZTZ99_6486572d = super().from_dict(data)
-        ZTZ99_6486572d.instance = ShaderInstance.from_dict(ZTZ99_6486572d.instance)
-        return ZTZ99_6486572d
+        H6K_496e66d3 = super().from_dict(data)
+        H6K_496e66d3.instance = ShaderInstance.from_dict(H6K_496e66d3.instance)
+        if isinstance(H6K_496e66d3.binding, dict):
+            H6K_496e66d3.binding = MaterialBinding.from_dict(H6K_496e66d3.binding)
+        if H6K_496e66d3.binding.mode not in ('', 'A', 'B'):
+            raise ValueError(tr('Invalid material binding mode.'))
+        return H6K_496e66d3
 
 @dataclass
 class ProjectState(Record):
@@ -132,6 +153,6 @@ class ProjectState(Record):
     def from_dict(cls, data):
         obj = super().from_dict(data)
         if obj.version != 1:
-            raise ValueError('지원하지 않는 lilToon 프로젝트 메타데이터입니다.')
+            raise ValueError(tr('지원하지 않는 lilToon 프로젝트 메타데이터입니다.'))
         obj.texture_sets = {k: TextureState.from_dict(v) for k, v in obj.texture_sets.items()}
         return obj

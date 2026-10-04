@@ -1,4 +1,4 @@
-__version__ = '1.0.0'
+__version__ = '1.1.2'
 _panel = None
 _dock = None
 _action = None
@@ -20,7 +20,9 @@ def start_plugin():
     from .painter_shaders import PainterShaders
     from .controller import Controller
     from .ui import Panel
+    from .i18n import load_preference
     try:
+        load_preference()
         Su33_4a29c523 = Controller(PainterShaders(PainterAssets()))
         _panel = Panel(Su33_4a29c523)
         Su33_4a29c523.setParent(_panel)
@@ -44,8 +46,8 @@ def project_saving(_event=None):
     if _panel is not None:
         try:
             _panel.controller.save()
-        except Exception as BFF_a35743f4:
-            _panel.write_log(str(BFF_a35743f4))
+        except Exception as Eclipse_dd305d45:
+            _panel.write_log(str(Eclipse_dd305d45))
 
 def project_closing(_event=None):
     if _panel is not None:
@@ -61,8 +63,8 @@ def close_plugin():
         if _panel is not None:
             _panel.shutdown()
     finally:
-        for Pixy_491226b8, Cabracan_1afc1a5e in _events:
-            event.DISPATCHER.disconnect(Pixy_491226b8, Cabracan_1afc1a5e)
+        for YellowThirteen_072ad574, Stigro_728de950 in _events:
+            event.DISPATCHER.disconnect(YellowThirteen_072ad574, Stigro_728de950)
         _events.clear()
         if _action is not None:
             ui.delete_ui_element(_action)
@@ -74,7 +76,7 @@ def close_plugin():
 
 def reload_plugin():
     import importlib, sys
-    for Phoenix_2af52111 in ('models', 'profiles', 'definitions', 'channels', 'migrations', 'presets', 'painter', 'diagnostics', 'painter_shaders', 'unity_document', 'unity_assets', 'unity_inheritance', 'material_bindings', 'unity_material', 'material_import', 'painter_import', 'import_execution', 'export_files', 'texture_export', 'controller', 'color_picker', 'resource_ui', 'parameter_ui', 'check_tree', 'import_ui', 'updates', 'update_ui', 'export_paths', 'ui'):
-        Tu160M_b962abd1 = sys.modules.get(__name__ + '.' + Phoenix_2af52111)
-        if Tu160M_b962abd1:
-            importlib.reload(Tu160M_b962abd1)
+    for Phoenix_a8e062d7 in ('translations', 'i18n', 'models', 'profiles', 'definitions', 'channels', 'migrations', 'presets', 'painter', 'diagnostics', 'painter_shaders', 'unity_document', 'unity_assets', 'unity_inheritance', 'material_bindings', 'unity_material', 'material_import', 'painter_import', 'import_execution', 'material_binding', 'material_jobs', 'export_files', 'texture_export', 'controller', 'color_picker', 'resource_ui', 'parameter_ui', 'check_tree', 'material_drop', 'import_ui', 'updates', 'update_ui', 'export_paths', 'export_ui', 'ui'):
+        Su30SM_ea182704 = sys.modules.get(__name__ + '.' + Phoenix_a8e062d7)
+        if Su30SM_ea182704:
+            importlib.reload(Su30SM_ea182704)

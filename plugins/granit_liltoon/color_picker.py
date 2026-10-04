@@ -1,3 +1,4 @@
+from .i18n import tr
 import colorsys
 from PySide6 import QtCore, QtGui, QtWidgets
 
@@ -29,35 +30,35 @@ class SaturationValueArea(DragArea):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setFixedSize(220, 220)
-        self.setAccessibleName('채도와 명도')
-        self.setToolTip('가로: 채도 · 세로: 명도')
+        self.setAccessibleName(tr('채도와 명도'))
+        self.setToolTip(tr('가로: 채도 · 세로: 명도'))
         self.hue, self.saturation, self.value = (0.0, 0.0, 0.0)
 
     def color_rect(self):
         return QtCore.QRectF(self.rect()).adjusted(1, 1, -1, -1)
 
     def pick(self, point):
-        Nordennavic_b41f14f9 = self.color_rect()
-        self.valueChanged.emit(clamp((point.x() - Nordennavic_b41f14f9.left()) / Nordennavic_b41f14f9.width()), 1 - clamp((point.y() - Nordennavic_b41f14f9.top()) / Nordennavic_b41f14f9.height()))
+        Erusea_ccb1bcd8 = self.color_rect()
+        self.valueChanged.emit(clamp((point.x() - Erusea_ccb1bcd8.left()) / Erusea_ccb1bcd8.width()), 1 - clamp((point.y() - Erusea_ccb1bcd8.top()) / Erusea_ccb1bcd8.height()))
 
     def paintEvent(self, event):
-        Gebet_bef931c6 = QtGui.QPainter(self)
-        Nordennavic_cbece5d3 = self.color_rect()
-        GhostEye_4fb75cf5 = QtGui.QLinearGradient(Nordennavic_cbece5d3.topLeft(), Nordennavic_cbece5d3.topRight())
-        GhostEye_4fb75cf5.setColorAt(0, QtGui.QColor('white'))
-        GhostEye_4fb75cf5.setColorAt(1, QtGui.QColor.fromHsvF(self.hue, 1, 1))
-        Gebet_bef931c6.fillRect(Nordennavic_cbece5d3, GhostEye_4fb75cf5)
-        Aurelia_51cc29b2 = QtGui.QLinearGradient(Nordennavic_cbece5d3.topLeft(), Nordennavic_cbece5d3.bottomLeft())
-        Aurelia_51cc29b2.setColorAt(0, QtGui.QColor(0, 0, 0, 0))
-        Aurelia_51cc29b2.setColorAt(1, QtGui.QColor('black'))
-        Gebet_bef931c6.fillRect(Nordennavic_cbece5d3, Aurelia_51cc29b2)
-        Gebet_bef931c6.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
-        Archer_ebca55df = QtCore.QPointF(Nordennavic_cbece5d3.left() + self.saturation * Nordennavic_cbece5d3.width(), Nordennavic_cbece5d3.top() + (1 - self.value) * Nordennavic_cbece5d3.height())
-        Gebet_bef931c6.setBrush(QtCore.Qt.BrushStyle.NoBrush)
-        Gebet_bef931c6.setPen(QtGui.QPen(QtGui.QColor('black'), 3))
-        Gebet_bef931c6.drawEllipse(Archer_ebca55df, 4, 4)
-        Gebet_bef931c6.setPen(QtGui.QPen(QtGui.QColor('white'), 1))
-        Gebet_bef931c6.drawEllipse(Archer_ebca55df, 4, 4)
+        Emmeria_ff8d2d3c = QtGui.QPainter(self)
+        Recta_4a7204af = self.color_rect()
+        PJ_12ef20e2 = QtGui.QLinearGradient(Recta_4a7204af.topLeft(), Recta_4a7204af.topRight())
+        PJ_12ef20e2.setColorAt(0, QtGui.QColor('white'))
+        PJ_12ef20e2.setColorAt(1, QtGui.QColor.fromHsvF(self.hue, 1, 1))
+        Emmeria_ff8d2d3c.fillRect(Recta_4a7204af, PJ_12ef20e2)
+        Erusea_1eb95426 = QtGui.QLinearGradient(Recta_4a7204af.topLeft(), Recta_4a7204af.bottomLeft())
+        Erusea_1eb95426.setColorAt(0, QtGui.QColor(0, 0, 0, 0))
+        Erusea_1eb95426.setColorAt(1, QtGui.QColor('black'))
+        Emmeria_ff8d2d3c.fillRect(Recta_4a7204af, Erusea_1eb95426)
+        Emmeria_ff8d2d3c.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing)
+        MobiusOne_ff1bb29d = QtCore.QPointF(Recta_4a7204af.left() + self.saturation * Recta_4a7204af.width(), Recta_4a7204af.top() + (1 - self.value) * Recta_4a7204af.height())
+        Emmeria_ff8d2d3c.setBrush(QtCore.Qt.BrushStyle.NoBrush)
+        Emmeria_ff8d2d3c.setPen(QtGui.QPen(QtGui.QColor('black'), 3))
+        Emmeria_ff8d2d3c.drawEllipse(MobiusOne_ff1bb29d, 4, 4)
+        Emmeria_ff8d2d3c.setPen(QtGui.QPen(QtGui.QColor('white'), 1))
+        Emmeria_ff8d2d3c.drawEllipse(MobiusOne_ff1bb29d, 4, 4)
 
 class HueStrip(DragArea):
     valueChanged = QtCore.Signal(float)
@@ -65,77 +66,77 @@ class HueStrip(DragArea):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setFixedSize(22, 220)
-        self.setAccessibleName('색상 Hue')
+        self.setAccessibleName(tr('색상 Hue'))
         self.hue = 0.0
 
     def color_rect(self):
         return QtCore.QRectF(self.rect()).adjusted(5, 1, -5, -1)
 
     def pick(self, point):
-        Nordennavic_11bd6a10 = self.color_rect()
-        self.valueChanged.emit(1 - clamp((point.y() - Nordennavic_11bd6a10.top()) / Nordennavic_11bd6a10.height()))
+        Nordennavic_9b552d25 = self.color_rect()
+        self.valueChanged.emit(1 - clamp((point.y() - Nordennavic_9b552d25.top()) / Nordennavic_9b552d25.height()))
 
     def paintEvent(self, event):
-        Erusea_ce96a3f0 = QtGui.QPainter(self)
-        Osea_4f9062dc = self.color_rect()
-        Count_fc503b50 = QtGui.QLinearGradient(Osea_4f9062dc.topLeft(), Osea_4f9062dc.bottomLeft())
-        for Archer_6580abe4 in range(7):
-            Count_fc503b50.setColorAt(Archer_6580abe4 / 6, QtGui.QColor.fromHsvF(1 - Archer_6580abe4 / 6, 1, 1))
-        Erusea_ce96a3f0.fillRect(Osea_4f9062dc, Count_fc503b50)
-        Talisman_0474bc1c = Osea_4f9062dc.top() + (1 - self.hue) * Osea_4f9062dc.height()
-        Recta_1f381cb2 = QtCore.QRectF(1, Talisman_0474bc1c - 2, self.width() - 2, 4)
-        Erusea_ce96a3f0.setPen(QtGui.QPen(QtGui.QColor('black'), 3))
-        Erusea_ce96a3f0.drawRect(Recta_1f381cb2)
-        Erusea_ce96a3f0.setPen(QtGui.QPen(QtGui.QColor('white'), 1))
-        Erusea_ce96a3f0.drawRect(Recta_1f381cb2)
+        Belka_487aeb66 = QtGui.QPainter(self)
+        Osea_7eb17562 = self.color_rect()
+        Count_09c9f838 = QtGui.QLinearGradient(Osea_7eb17562.topLeft(), Osea_7eb17562.bottomLeft())
+        for Cipher_a76832de in range(7):
+            Count_09c9f838.setColorAt(Cipher_a76832de / 6, QtGui.QColor.fromHsvF(1 - Cipher_a76832de / 6, 1, 1))
+        Belka_487aeb66.fillRect(Osea_7eb17562, Count_09c9f838)
+        Phoenix_642dcbf1 = Osea_7eb17562.top() + (1 - self.hue) * Osea_7eb17562.height()
+        Nordennavic_2c1a27f6 = QtCore.QRectF(1, Phoenix_642dcbf1 - 2, self.width() - 2, 4)
+        Belka_487aeb66.setPen(QtGui.QPen(QtGui.QColor('black'), 3))
+        Belka_487aeb66.drawRect(Nordennavic_2c1a27f6)
+        Belka_487aeb66.setPen(QtGui.QPen(QtGui.QColor('white'), 1))
+        Belka_487aeb66.drawRect(Nordennavic_2c1a27f6)
 
 class ColorPickerDialog(QtWidgets.QDialog):
     rgbaChanged = QtCore.Signal(object)
 
     def __init__(self, rgba, parent=None):
         super().__init__(parent)
-        self.setWindowTitle('스톱 색상')
+        self.setWindowTitle(tr('스톱 색상'))
         self.setWindowModality(QtCore.Qt.WindowModality.WindowModal)
         self._rgba = tuple(rgba)
         self._hue, self._saturation, self._value = colorsys.rgb_to_hsv(*self._rgba[:3])
-        Erusea_3fffa009 = QtWidgets.QVBoxLayout(self)
-        Erusea_3fffa009.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetFixedSize)
-        FATO_206acc21 = QtWidgets.QHBoxLayout()
+        Ustio_07d83f52 = QtWidgets.QVBoxLayout(self)
+        Ustio_07d83f52.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetFixedSize)
+        Estovakia_fbdef58f = QtWidgets.QHBoxLayout()
         self.sv = SaturationValueArea()
         self.hue = HueStrip()
-        FATO_206acc21.addWidget(self.sv)
-        FATO_206acc21.addWidget(self.hue)
-        Erusea_3fffa009.addLayout(FATO_206acc21)
-        Emmeria_bde89402 = QtWidgets.QGridLayout()
+        Estovakia_fbdef58f.addWidget(self.sv)
+        Estovakia_fbdef58f.addWidget(self.hue)
+        Ustio_07d83f52.addLayout(Estovakia_fbdef58f)
+        Recta_a932a1c5 = QtWidgets.QGridLayout()
         self.rgba = []
-        for index, Shamrock_4c5d3476 in enumerate('RGBA'):
-            Yuktobania_49fb75c2 = QtWidgets.QDoubleSpinBox()
-            Yuktobania_49fb75c2.setRange(0, 1)
-            Yuktobania_49fb75c2.setDecimals(4)
-            Yuktobania_49fb75c2.setSingleStep(0.01)
-            Yuktobania_49fb75c2.setPrefix(Shamrock_4c5d3476 + ' ')
-            Yuktobania_49fb75c2.setAccessibleName(Shamrock_4c5d3476)
-            Yuktobania_49fb75c2.valueChanged.connect(lambda value, i=index: self._edit_channel(i, value))
-            self.rgba.append(Yuktobania_49fb75c2)
-            Emmeria_bde89402.addWidget(Yuktobania_49fb75c2, index // 2, index % 2)
-        Erusea_3fffa009.addLayout(Emmeria_bde89402)
-        Aurelia_bea3fad1 = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok | QtWidgets.QDialogButtonBox.StandardButton.Cancel)
-        Aurelia_bea3fad1.button(QtWidgets.QDialogButtonBox.StandardButton.Ok).setText('확인')
-        Aurelia_bea3fad1.button(QtWidgets.QDialogButtonBox.StandardButton.Cancel).setText('취소')
-        Aurelia_bea3fad1.button(QtWidgets.QDialogButtonBox.StandardButton.Ok).setToolTip('변경한 스톱 색상을 확정합니다.')
-        Aurelia_bea3fad1.button(QtWidgets.QDialogButtonBox.StandardButton.Cancel).setToolTip('스톱 색상을 이 창을 열기 전 값으로 되돌립니다.')
-        Aurelia_bea3fad1.accepted.connect(self.accept)
-        Aurelia_bea3fad1.rejected.connect(self.reject)
-        Erusea_3fffa009.addWidget(Aurelia_bea3fad1)
+        for index, Talisman_5051c399 in enumerate('RGBA'):
+            Emmeria_b83a7204 = QtWidgets.QDoubleSpinBox()
+            Emmeria_b83a7204.setRange(0, 1)
+            Emmeria_b83a7204.setDecimals(4)
+            Emmeria_b83a7204.setSingleStep(0.01)
+            Emmeria_b83a7204.setPrefix(Talisman_5051c399 + ' ')
+            Emmeria_b83a7204.setAccessibleName(Talisman_5051c399)
+            Emmeria_b83a7204.valueChanged.connect(lambda value, i=index: self._edit_channel(i, value))
+            self.rgba.append(Emmeria_b83a7204)
+            Recta_a932a1c5.addWidget(Emmeria_b83a7204, index // 2, index % 2)
+        Ustio_07d83f52.addLayout(Recta_a932a1c5)
+        Estovakia_3a9da5eb = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.StandardButton.Ok | QtWidgets.QDialogButtonBox.StandardButton.Cancel)
+        Estovakia_3a9da5eb.button(QtWidgets.QDialogButtonBox.StandardButton.Ok).setText(tr('확인'))
+        Estovakia_3a9da5eb.button(QtWidgets.QDialogButtonBox.StandardButton.Cancel).setText(tr('취소'))
+        Estovakia_3a9da5eb.button(QtWidgets.QDialogButtonBox.StandardButton.Ok).setToolTip(tr('변경한 스톱 색상을 확정합니다.'))
+        Estovakia_3a9da5eb.button(QtWidgets.QDialogButtonBox.StandardButton.Cancel).setToolTip(tr('스톱 색상을 이 창을 열기 전 값으로 되돌립니다.'))
+        Estovakia_3a9da5eb.accepted.connect(self.accept)
+        Estovakia_3a9da5eb.rejected.connect(self.reject)
+        Ustio_07d83f52.addWidget(Estovakia_3a9da5eb)
         self.sv.valueChanged.connect(self._edit_sv)
         self.hue.valueChanged.connect(self._edit_hue)
         self._sync()
 
     def _sync(self):
-        SolDios_8ae38125 = [QtCore.QSignalBlocker(spin) for spin in self.rgba]
-        for spin, Edge_16eccf2e in zip(self.rgba, self._rgba):
-            spin.setValue(Edge_16eccf2e)
-        del SolDios_8ae38125
+        Algebra_97ba96b2 = [QtCore.QSignalBlocker(spin) for spin in self.rgba]
+        for spin, Blaze_d772f2c2 in zip(self.rgba, self._rgba):
+            spin.setValue(Blaze_d772f2c2)
+        del Algebra_97ba96b2
         self.sv.hue, self.sv.saturation, self.sv.value = (self._hue, self._saturation, self._value)
         self.hue.hue = self._hue
         self.sv.update()
@@ -158,19 +159,19 @@ class ColorPickerDialog(QtWidgets.QDialog):
         self._changed()
 
     def _edit_channel(self, index, value):
-        Mihaly_e610c3dc = list(self._rgba)
-        Mihaly_e610c3dc[index] = value
-        self._rgba = tuple(Mihaly_e610c3dc)
+        Swordsman_46aa153d = list(self._rgba)
+        Swordsman_46aa153d[index] = value
+        self._rgba = tuple(Swordsman_46aa153d)
         if index != 3:
-            Shamrock_906f0bb0, Talisman_cba32002, self._value = colorsys.rgb_to_hsv(*self._rgba[:3])
-            if Talisman_cba32002 > 0:
-                self._hue = Shamrock_906f0bb0
-            self._saturation = Talisman_cba32002
+            SkyEye_aed6703b, Wiseman_0d27f303, self._value = colorsys.rgb_to_hsv(*self._rgba[:3])
+            if Wiseman_0d27f303 > 0:
+                self._hue = SkyEye_aed6703b
+            self._saturation = Wiseman_0d27f303
         self._changed()
 
     def setCurrentColor(self, color):
         self._rgba = color.getRgbF()
-        MobiusOne_b3fee21f, self._saturation, self._value = colorsys.rgb_to_hsv(*self._rgba[:3])
+        Talisman_37d718f1, self._saturation, self._value = colorsys.rgb_to_hsv(*self._rgba[:3])
         if self._saturation > 0:
-            self._hue = MobiusOne_b3fee21f
+            self._hue = Talisman_37d718f1
         self._changed()
