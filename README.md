@@ -18,9 +18,7 @@ ZIP 설치 경로랑 사용법은 아래에 있음. 새 버전은 위의 **Relea
 
 ## 🎬 [처음이면 이거부터 — 튜토리얼 영상](https://www.youtube.com/watch?v=W_PbVABDJkw)
 
-[![GrAnit lilToon 튜토리얼 — 클릭하면 YouTube에서 재생](https://i.ytimg.com/vi/W_PbVABDJkw/hqdefault.jpg)](https://www.youtube.com/watch?v=W_PbVABDJkw)
-
-**이미지를 누르면 YouTube에서 재생됨. [▶ 튜토리얼 바로 보기](https://www.youtube.com/watch?v=W_PbVABDJkw)**
+처음 쓰면 위 링크 눌러서 영상부터 보면 됨.
 
 ---
 
@@ -80,6 +78,10 @@ ZIP 설치 경로랑 사용법은 아래에 있음. 새 버전은 위의 **Relea
 
 **mat 바인딩 또는 파일 드롭 → 필요한 항목 체크 → 선택 항목 가져오기.** 연결된 파일에서 다시 가져올 때는 **mat 가져오기**를 쓰면 됨.
 
+![Unity lilToon 머테리얼을 Painter로 가져와 작업하는 예시](docs/images/unity-to-painter-import.webp)
+
+Unity에서 쓰던 머테리얼을 가져와서 회색 모델에 적용하고, 섭페에서 이어서 작업하는 예시임. 움짤의 좌우 비교 구간은 **왼쪽 Painter / 오른쪽 Unity**. 가져올 설정이랑 텍스처만 골라서 넣으면 됨.
+
 체크박스는 누른 채 드래그해서 여러 개 골라도 됨. 텍스처 적용은 기본 **Fill Layer**, 에셋만 가져오는 방식도 선택할 수 있음. 성공하면 현재 텍스처셋에 lilToon이 자동 적용됨.
 
 연결된 텍스처와 Variant 부모를 찾으려면 원본 Unity 프로젝트와 `.meta` 파일도 필요함. 자동으로 못 찾으면 다이얼로그에서 프로젝트 폴더를 지정해.
@@ -89,6 +91,10 @@ ZIP 설치 경로랑 사용법은 아래에 있음. 새 버전은 위의 **Relea
 - **mat 내보내기:** 머테리얼 파일과 텍스처 폴더를 지정해서 함께 저장. 성공하면 내보낸 `.mat`으로 바인딩도 바뀜.
 - **mat 퀵 업데이트:** 마지막 성공 경로에 머테리얼과 텍스처를 덮어씀.
 - **mat 파라미터 업데이트 / 임포트:** 대상 `.mat`에 설정값만 쓰거나 다시 읽음.
+
+![Painter에서 반사색 등을 조절하고 Unity 머테리얼에 반영하는 예시](docs/images/painter-to-unity-update.webp)
+
+반사색·MatCap 같은 값을 섭페에서 만지고 Unity 쪽 결과를 확인하는 예시임. 좌우 비교 구간은 **왼쪽 Painter / 오른쪽 Unity**. 값만 바꿨으면 **mat 파라미터 업데이트**, 칠한 텍스처도 바뀌었으면 **mat 퀵 업데이트**를 누르면 됨. 내보내기·업데이트 버튼을 눌러 파일에 반영하는 방식임.
 
 릴툰이 설치된 Unity 프로젝트의 `Assets` 아래에 저장하면 연결하기 편함. **같은 이름의 파일 덮어쓰기**를 체크하면 기존 `.mat`과 텍스처를 갱신하고 `.meta` GUID는 유지함. 체크하지 않으면 파일이 겹칠 때 중단함. JSON 동반 파일은 안 만듦. 실패하면 내보내기 창에 이유가 뜨니 설정을 고쳐서 다시 시도하면 됨.
 
