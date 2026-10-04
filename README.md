@@ -103,7 +103,7 @@ Outline, 전용 헤어·피부 셰이딩, 반투명·굴절은 아직 지원하�
 
 ## EULA
 
-[EULA 전문 보기](EULA.txt)
+[EULA 전문 보기](EULA.png)
 
 ## License
 
