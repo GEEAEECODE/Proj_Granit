@@ -1,20 +1,13 @@
 # GrAnit lilToon
 
-# ⬇️ [다운로드는 여기 — Releases](https://github.com/GEEAEECODE/Proj_Granit/releases/latest)
-
-> [!IMPORTANT]
-> **처음이면 MSI 설치 파일 받아. 실행 → 언어 선택 → 설치.**
->
-> **Windows 64비트 / Substance 3D Painter 12용.**
-
 | 추천 · 자동 설치 | 직접 폴더에 넣을 거면 |
 | :---: | :---: |
-| **[⬇️ Releases에서 MSI 받기](https://github.com/GEEAEECODE/Proj_Granit/releases/latest)** | **[⬇️ Releases에서 ZIP 확인](https://github.com/GEEAEECODE/Proj_Granit/releases/latest)** |
+| **[⬇️ Releases에서 MSI 받기](https://github.com/GEEAEECODE/Proj_Granit/releases/download/1.1.2/GrAnit-lilToon-1.1.2-x64.msi)** | **[⬇️ Releases에서 ZIP 확인](https://github.com/GEEAEECODE/Proj_Granit/releases/download/1.1.2/GrAnit-lilToon-1.1.2.zip)** |
 | 실행 → 설치 | 압축 풀기 → 플러그인 폴더에 복사 |
 
 **작업 저장하고 섭페 끄기 → MSI 설치 → 섭페 켜기 → Python 메뉴에서 `granit_liltoon` 체크.**
 
-ZIP 설치 경로랑 사용법은 아래에 있음. 새 버전은 위의 **Releases**에서 확인해.
+ZIP 설치 경로랑 사용법은 아래에 있음. 새 버전은 위의 **[Releases](https://github.com/GEEAEECODE/Proj_Granit/releases/latest)**에서 확인해.
 
 ## 🎬 [처음이면 이거부터 — 튜토리얼 영상](https://www.youtube.com/watch?v=W_PbVABDJkw)
 
