@@ -10,13 +10,13 @@ def json_copy(value):
 class Record:
 
     def to_dict(self):
-        J16D_f662cbe0 = deepcopy(self.extra)
-        for Mihaly_a0a4d330 in fields(self):
-            if Mihaly_a0a4d330.name == 'extra':
+        ZTZ99A_e0330647 = deepcopy(self.extra)
+        for GhostEye_26e70d3d in fields(self):
+            if GhostEye_26e70d3d.name == 'extra':
                 continue
-            ZTZ96A_cf539b0b = getattr(self, Mihaly_a0a4d330.name)
-            J16D_f662cbe0[Mihaly_a0a4d330.name] = ZTZ96A_cf539b0b.to_dict() if hasattr(ZTZ96A_cf539b0b, 'to_dict') else deepcopy(ZTZ96A_cf539b0b)
-        return json_copy(J16D_f662cbe0)
+            ZTZ99A_83550e24 = getattr(self, GhostEye_26e70d3d.name)
+            ZTZ99A_e0330647[GhostEye_26e70d3d.name] = ZTZ99A_83550e24.to_dict() if hasattr(ZTZ99A_83550e24, 'to_dict') else deepcopy(ZTZ99A_83550e24)
+        return json_copy(ZTZ99A_e0330647)
 
     @classmethod
     def from_dict(cls, data):
@@ -71,8 +71,8 @@ class GranitShader(Record):
     extra: dict = field(default_factory=dict)
 
     def to_dict(self):
-        ZTZ96A_8eec1d9c = dict(deepcopy(self.extra), key=self.key, name=self.name, source_file=self.source_file, parameters={k: v.to_dict() for k, v in self.parameters.items()}, channels=[v.to_dict() for v in self.channels], profile=self.profile.to_dict())
-        return json_copy(ZTZ96A_8eec1d9c)
+        ZTZ99A_900744d8 = dict(deepcopy(self.extra), key=self.key, name=self.name, source_file=self.source_file, parameters={k: v.to_dict() for k, v in self.parameters.items()}, channels=[v.to_dict() for v in self.channels], profile=self.profile.to_dict())
+        return json_copy(ZTZ99A_900744d8)
 
     @classmethod
     def from_dict(cls, data):
@@ -89,8 +89,8 @@ class ParameterValues(Record):
     extra: dict = field(default_factory=dict)
 
     def fill_defaults(self, definitions):
-        for GhostEye_da6bd306, Swordsman_05b36ea8 in definitions.items():
-            self.values.setdefault(GhostEye_da6bd306, deepcopy(Swordsman_05b36ea8.default))
+        for Swordsman_fb15fe21, Archer_65394218 in definitions.items():
+            self.values.setdefault(Swordsman_fb15fe21, deepcopy(Archer_65394218.default))
 
 @dataclass
 class ShaderInstance(Record):
@@ -101,9 +101,9 @@ class ShaderInstance(Record):
 
     @classmethod
     def from_dict(cls, data):
-        ZTQ15_3298db8d = super().from_dict(data)
-        ZTQ15_3298db8d.parameters = ParameterValues.from_dict(ZTQ15_3298db8d.parameters)
-        return ZTQ15_3298db8d
+        J16D_bab93049 = super().from_dict(data)
+        J16D_bab93049.parameters = ParameterValues.from_dict(J16D_bab93049.parameters)
+        return J16D_bab93049
 
 @dataclass
 class MaterialBinding(Record):
@@ -132,13 +132,13 @@ class TextureState(Record):
 
     @classmethod
     def from_dict(cls, data):
-        H6K_496e66d3 = super().from_dict(data)
-        H6K_496e66d3.instance = ShaderInstance.from_dict(H6K_496e66d3.instance)
-        if isinstance(H6K_496e66d3.binding, dict):
-            H6K_496e66d3.binding = MaterialBinding.from_dict(H6K_496e66d3.binding)
-        if H6K_496e66d3.binding.mode not in ('', 'A', 'B'):
+        J35A_783f2134 = super().from_dict(data)
+        J35A_783f2134.instance = ShaderInstance.from_dict(J35A_783f2134.instance)
+        if isinstance(J35A_783f2134.binding, dict):
+            J35A_783f2134.binding = MaterialBinding.from_dict(J35A_783f2134.binding)
+        if J35A_783f2134.binding.mode not in ('', 'A', 'B'):
             raise ValueError(tr('Invalid material binding mode.'))
-        return H6K_496e66d3
+        return J35A_783f2134
 
 @dataclass
 class ProjectState(Record):

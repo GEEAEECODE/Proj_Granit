@@ -76,7 +76,7 @@ def close_plugin():
 
 def reload_plugin():
     import importlib, sys
-    for Phoenix_a8e062d7 in ('translations', 'i18n', 'models', 'profiles', 'definitions', 'channels', 'migrations', 'presets', 'painter', 'diagnostics', 'painter_shaders', 'unity_document', 'unity_assets', 'unity_inheritance', 'material_bindings', 'unity_material', 'material_import', 'painter_import', 'import_execution', 'material_binding', 'material_jobs', 'export_files', 'texture_export', 'controller', 'color_picker', 'resource_ui', 'parameter_ui', 'check_tree', 'material_drop', 'import_ui', 'updates', 'update_ui', 'export_paths', 'export_ui', 'ui'):
+    for Phoenix_a8e062d7 in ('translations', 'i18n', 'operations', 'models', 'catalog_validation', 'profiles', 'definitions', 'channels', 'migrations', 'presets', 'painter', 'diagnostics', 'painter_shaders', 'unity_document', 'unity_assets', 'unity_inheritance', 'material_bindings', 'unity_material', 'material_import', 'painter_import', 'import_execution', 'material_binding', 'material_jobs', 'export_files', 'texture_export', 'material_session', 'controller', 'color_picker', 'resource_ui', 'parameter_ui', 'check_tree', 'material_drop', 'import_ui', 'updates', 'update_ui', 'export_paths', 'export_ui', 'ui'):
         Su30SM_ea182704 = sys.modules.get(__name__ + '.' + Phoenix_a8e062d7)
         if Su30SM_ea182704:
             importlib.reload(Su30SM_ea182704)

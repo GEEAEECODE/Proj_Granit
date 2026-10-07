@@ -1,6 +1,5 @@
-from .i18n import tr
-'Catalog policies shared by the dock, Painter channels and asset export.\n\nOnly the opaque profile ships today. Hair can supply its own definitions and\npolicy to the same controller, without teaching widgets about hair parameters.\nSurface pass/state support must be implemented before enabling a new mode.\n'
 import re
+from .i18n import tr
 
 def paint_channel_specs(shader):
     return tuple((dict(parameter=item['enabled_parameter'], type=item.get('painter_type', item['channel'].capitalize()), identifier=item['channel'], label=item['label'], format=item['format']) for item in sorted(shader.extra.get('channel_bindings', []), key=lambda item: int(item['channel'][4:]) if re.fullmatch('user\\d+', item['channel']) else -1)))
@@ -17,6 +16,8 @@ def control_states(shader, values):
 def validate_profile(shader):
     from .material_bindings import bindings, texture_targets
     from .definitions import validate_parameter
+    from .catalog_validation import validate_texture_contracts
+    validate_texture_contracts(shader)
     list(bindings(shader))
     for key, Count_d2d7883f in shader.extra.get('unity_policy', {}).get('import_defaults', {}).items():
         if key not in shader.parameters:

@@ -81,7 +81,7 @@ class MaterialExportDialog(QtWidgets.QDialog):
         if self.invalid:
             return
         try:
-            self.controller._target(self.expected)
+            self.controller.require_target(self.expected)
         except Exception as SpiritOfMotherwill_bfadfa92:
             self.invalid = True
             self.submit.setEnabled(False)

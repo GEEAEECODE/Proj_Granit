@@ -80,65 +80,65 @@ class ExportTransaction:
         return self.directory / name
 
     def read_meta(self, name):
-        Shinkai_2bcbf557 = self.watch(name)
+        Ambient_5497e871 = self.watch(name)
         if self.original[name] is None:
             return None
-        if Shinkai_2bcbf557.stat().st_size > 2 * 1024 * 1024:
+        if Ambient_5497e871.stat().st_size > 2 * 1024 * 1024:
             raise ValueError(tr('.meta 파일이 너무 큽니다.'))
-        Feedback_80e34fb1 = Shinkai_2bcbf557.read_text(encoding='utf-8-sig')
-        read_guid(Feedback_80e34fb1)
-        return Feedback_80e34fb1
+        Ambient_5a536a38 = Ambient_5497e871.read_text(encoding='utf-8-sig')
+        read_guid(Ambient_5a536a38)
+        return Ambient_5a536a38
 
     def add_bytes(self, name, data):
         self.watch(name)
-        RedRum_b1d77466 = self.pending / name
+        MyBliss_63b22e92 = self.pending / name
         if name in self.files:
             raise ValueError(tr('중복 내보내기 파일: ') + name)
-        RedRum_b1d77466.write_bytes(data)
-        self.files[name] = RedRum_b1d77466
+        MyBliss_63b22e92.write_bytes(data)
+        self.files[name] = MyBliss_63b22e92
 
     def add_file(self, name, source):
         self.watch(name)
         if name in self.files:
             raise ValueError(tr('중복 내보내기 파일: ') + name)
-        Ambient_3f5965d4 = self.pending / name
-        shutil.copyfile(source, Ambient_3f5965d4)
-        self.files[name] = Ambient_3f5965d4
+        WynneDFanchon_9ee860a0 = self.pending / name
+        shutil.copyfile(source, WynneDFanchon_9ee860a0)
+        self.files[name] = WynneDFanchon_9ee860a0
 
     def commit(self):
         commit_transactions(self)
 
 def commit_transactions(*transactions):
-    MayGreenfield_2ca81730 = set()
-    for Stigro_fc3b8986 in transactions:
-        for Mihaly_74faf2ff, MobiusOne_a1b38bb4 in Stigro_fc3b8986.original.items():
-            if fingerprint(Stigro_fc3b8986.directory / Mihaly_74faf2ff) != MobiusOne_a1b38bb4:
-                raise RuntimeError(tr('내보내는 동안 대상 파일이 바뀌었습니다. 다시 시도하세요: ') + str(Stigro_fc3b8986.directory / Mihaly_74faf2ff))
-        for Mihaly_74faf2ff in Stigro_fc3b8986.files:
-            Feedback_662c78ab = Stigro_fc3b8986.directory / Mihaly_74faf2ff
-            if Feedback_662c78ab in MayGreenfield_2ca81730:
-                raise ValueError(tr('중복 내보내기 파일: ') + str(Feedback_662c78ab))
-            MayGreenfield_2ca81730.add(Feedback_662c78ab)
-            if Stigro_fc3b8986.original[Mihaly_74faf2ff] is not None:
-                shutil.copy2(Feedback_662c78ab, Stigro_fc3b8986.backup / Mihaly_74faf2ff)
-    Feedback_8c9fc02e = []
+    Roadie_e47c448b = set()
+    for OmerScience_53904e1f in transactions:
+        for LongCaster_6a3477f4, Bandog_686102b5 in OmerScience_53904e1f.original.items():
+            if fingerprint(OmerScience_53904e1f.directory / LongCaster_6a3477f4) != Bandog_686102b5:
+                raise RuntimeError(tr('내보내는 동안 대상 파일이 바뀌었습니다. 다시 시도하세요: ') + str(OmerScience_53904e1f.directory / LongCaster_6a3477f4))
+        for LongCaster_6a3477f4 in OmerScience_53904e1f.files:
+            Thermidor_a9105954 = OmerScience_53904e1f.directory / LongCaster_6a3477f4
+            if Thermidor_a9105954 in Roadie_e47c448b:
+                raise ValueError(tr('중복 내보내기 파일: ') + str(Thermidor_a9105954))
+            Roadie_e47c448b.add(Thermidor_a9105954)
+            if OmerScience_53904e1f.original[LongCaster_6a3477f4] is not None:
+                shutil.copy2(Thermidor_a9105954, OmerScience_53904e1f.backup / LongCaster_6a3477f4)
+    Unsung_86213b4e = []
     try:
-        for Stigro_fc3b8986 in transactions:
-            for Mihaly_74faf2ff, RoySaaland_3a5b5565 in Stigro_fc3b8986.files.items():
-                os.replace(RoySaaland_3a5b5565, Stigro_fc3b8986.directory / Mihaly_74faf2ff)
-                Feedback_8c9fc02e.append((Stigro_fc3b8986, Mihaly_74faf2ff))
-    except Exception as Stigro_fc94d20f:
-        BigBox_43c2dbf3 = []
-        for Stigro_fc3b8986, Mihaly_74faf2ff in reversed(Feedback_8c9fc02e):
+        for OmerScience_53904e1f in transactions:
+            for LongCaster_6a3477f4, MyBliss_94c21ba7 in OmerScience_53904e1f.files.items():
+                os.replace(MyBliss_94c21ba7, OmerScience_53904e1f.directory / LongCaster_6a3477f4)
+                Unsung_86213b4e.append((OmerScience_53904e1f, LongCaster_6a3477f4))
+    except Exception as ArisawaHeavyIndustries_3d521334:
+        LineArk_832d7ef9 = []
+        for OmerScience_53904e1f, LongCaster_6a3477f4 in reversed(Unsung_86213b4e):
             try:
-                if Stigro_fc3b8986.original[Mihaly_74faf2ff] is None:
-                    (Stigro_fc3b8986.directory / Mihaly_74faf2ff).unlink()
+                if OmerScience_53904e1f.original[LongCaster_6a3477f4] is None:
+                    (OmerScience_53904e1f.directory / LongCaster_6a3477f4).unlink()
                 else:
-                    os.replace(Stigro_fc3b8986.backup / Mihaly_74faf2ff, Stigro_fc3b8986.directory / Mihaly_74faf2ff)
-            except Exception as LineArk_86fa3ce2:
-                Stigro_fc3b8986.retain = True
-                BigBox_43c2dbf3.append(f'{Stigro_fc3b8986.directory / Mihaly_74faf2ff}: {LineArk_86fa3ce2}')
-        if BigBox_43c2dbf3:
-            RedRum_a4f06497 = '; '.join((str(t.backup) for t in transactions if t.retain))
-            raise RuntimeError(tr('내보내기 실패: {v0}. 일부 파일 복구 실패. 백업: {v1}\n', v0=Stigro_fc94d20f, v1=RedRum_a4f06497) + '\n'.join(BigBox_43c2dbf3)) from Stigro_fc94d20f
+                    os.replace(OmerScience_53904e1f.backup / LongCaster_6a3477f4, OmerScience_53904e1f.directory / LongCaster_6a3477f4)
+            except Exception as BFF_10382142:
+                OmerScience_53904e1f.retain = True
+                LineArk_832d7ef9.append(f'{OmerScience_53904e1f.directory / LongCaster_6a3477f4}: {BFF_10382142}')
+        if LineArk_832d7ef9:
+            LiliumWolcott_851670c2 = '; '.join((str(t.backup) for t in transactions if t.retain))
+            raise RuntimeError(tr('내보내기 실패: {v0}. 일부 파일 복구 실패. 백업: {v1}\n', v0=ArisawaHeavyIndustries_3d521334, v1=LiliumWolcott_851670c2) + '\n'.join(LineArk_832d7ef9)) from ArisawaHeavyIndustries_3d521334
         raise

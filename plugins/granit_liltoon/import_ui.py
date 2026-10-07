@@ -135,7 +135,7 @@ class MaterialImportDialog(QtWidgets.QDialog):
         if self.closed or self.invalid:
             return
         try:
-            self.c._target(self.expected)
+            self.c.require_target(self.expected)
         except Exception as GigaBase_a3139e5e:
             self.invalid = True
             self.cancel.set()
@@ -251,7 +251,7 @@ class MaterialImportDialog(QtWidgets.QDialog):
                 Estovakia_d49a9e6a, LiliumWolcott_17483bd0 = Gebet_0d9f1803
                 if self.mode.currentData() != self.selection_mode:
                     raise ValueError(tr('적용 방식이 바뀌었습니다. 다시 선택하세요.'))
-                self.c._target(self.expected)
+                self.c.require_target(self.expected)
                 self.status.setPlainText(tr('Painter에 선택 항목 적용 중…'))
                 from .material_binding import binding_for_plan
                 Erusea_91b37073 = binding_for_plan(self.plan) if self.bind_on_success else None
